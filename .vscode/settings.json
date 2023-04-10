@@ -4,6 +4,10 @@
       "path": "/opt/conda/bin/python",
       "type": "pythonEnvironment"
     },
+    {
+      "path": "/usr/bin/python3",
+      "type": "pythonEnvironment"
+    }
   ],
   "runOnSave.commands": [
     {
@@ -21,6 +25,6 @@
   "python.formatting.provider": "black",
   "python.linting.flake8Enabled": true,
   "python.linting.enabled": true,
-  "python.linting.flake8Path": "/home/default/.conda/envs/econ/lib/python3.10/site-packages/flake8",
+  "python.linting.flake8Path": "/opt/conda/envs/default/lib/python3.10/site-packages/flake8",
   "python.analysis.typeCheckingMode": "basic"
 }
