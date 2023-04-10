@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  conda-repo-template:
+    # Choose one
+    # image: utkusarioglu/conda-econ-devcontainer:1.0.11
+    # image: utkusarioglu/conda-math-devcontainer:1.0.11
+    # image: utkusarioglu/conda-music-devcontainer:.10.11
+
+    environment:
+      PYTHONPATH: /utkusarioglu-com/templates/conda-repo-template
+    volumes:
+      - type: bind
+        source: ..
+        target: /utkusarioglu-com/templates/conda-repo-template
