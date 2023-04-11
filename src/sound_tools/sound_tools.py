@@ -12,24 +12,34 @@ frequencies = {
 
 
 class SoundTools:
-    duration = 1.5
     sample_rate = 44100
 
     @staticmethod
-    def create_sound(freq: float, duration: float):
+    def create_sound(duration: float, freq: float):
         t = np.arange(0, duration, 1 / SoundTools.sample_rate)
         wave = np.sin(2 * np.pi * t * freq)
         return wave
 
     @staticmethod
-    def create_chord(*notes: str) -> np.ndarray:
+    def create_chord(
+        duration: float,
+        *notes: str,
+    ) -> np.ndarray:
         chord_notes = [
-            SoundTools.create_sound(frequencies[note], SoundTools.duration)
+            SoundTools.create_sound(duration, frequencies[note])
             for note in notes
         ]
         return reduce(operator.add, chord_notes)
 
     @staticmethod
     def create_sequence(*sequence) -> np.ndarray:
-        chords = tuple([SoundTools.create_chord(*notes) for notes in sequence])
+        chords = tuple(
+            [
+                SoundTools.create_chord(
+                    duration_and_notes[0],
+                    *duration_and_notes[1].strip().upper().split(" "),
+                )
+                for duration_and_notes in sequence
+            ]
+        )
         return np.concatenate(chords)
