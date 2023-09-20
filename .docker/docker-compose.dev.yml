@@ -2,14 +2,22 @@ version: "3.9"
 
 services:
   signals-workshop:
-    # image: utkusarioglu/conda-music-devcontainer:1.0.11
+    # image: utkusarioglu/conda-music-devcontainer:1.0.15
+    image: utkusarioglu/conda-music-devcontainer:experiment-feat-music-sequencer-2
     # image: utkusarioglu/conda-music-devcontainer:experiment-feature-pip-7
-    image: utkusarioglu/conda-music-devcontainer:experiment-feature-pip-33
+    # image: utkusarioglu/conda-music-devcontainer:experiment-feature-pip-33
     extra_hosts:
       supercollider: host-gateway
+      touch_osc: host-gateway
+    # devices:
+    #   - $PULSE_SERVER:/dev/snd
     environment:
       PYTHONPATH: /utkusarioglu-com/workshops/signals
+      PULSE_SERVER: ${PULSE_SERVER}
     volumes:
       - type: bind
         source: ..
         target: /utkusarioglu-com/workshops/signals
+      - type: bind
+        source: /mnt/wslg
+        target: /mnt/wslg
