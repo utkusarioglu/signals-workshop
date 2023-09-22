@@ -18,7 +18,8 @@
         "ms-python.python",
         "ms-toolsai.jupyter",
         "ms-python.black-formatter",
-        "jatinchowdhury18.vscode-supercollider"
+        "jatinchowdhury18.vscode-supercollider",
+        "ms-vscode.powershell"
       ]
     }
   },
