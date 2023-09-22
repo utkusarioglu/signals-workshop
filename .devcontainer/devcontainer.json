@@ -1,11 +1,11 @@
 {
-  "name": "signals.workshops.utkusarioglu.com",
+  "name": "signals-workshop.workshops.utkusarioglu.com",
   "dockerComposeFile": [
     "../.docker/docker-compose.dev.yml",
     "docker-compose.yml"
   ],
   "service": "signals-workshop",
-  "workspaceFolder": "/utkusarioglu-com/workshops/signals",
+  "workspaceFolder": "/utkusarioglu-com/workshops/signals-workshop",
   "customizations": {
     "vscode": {
       "settings": {
