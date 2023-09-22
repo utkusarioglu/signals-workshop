@@ -12,7 +12,7 @@ services:
     # devices:
     #   - $PULSE_SERVER:/dev/snd
     environment:
-      PYTHONPATH: /utkusarioglu-com/workshops/signals-workshop
+      PYTHONPATH: /utkusarioglu-com/workshops/signals-workshop/src
       PULSE_SERVER: ${PULSE_SERVER}
     volumes:
       - type: bind
