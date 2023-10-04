@@ -19,7 +19,8 @@
         "ms-toolsai.jupyter",
         "ms-python.black-formatter",
         "jatinchowdhury18.vscode-supercollider",
-        "ms-vscode.powershell"
+        "ms-vscode.powershell",
+        "tamasfe.even-better-toml"
       ]
     }
   },
