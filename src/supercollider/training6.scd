@@ -38,9 +38,9 @@ s.waitForBoot({
     wave = PlayBuf.ar(
       numChannels: 2, 
       bufnum: buf,
-      rate: BufRateScale.kr(amenWav) * rate, 
+      rate: BufRateScale.kr(amenWav) * rate,
       loop: loop,
-      startPos: startPos
+      startPos: startPos,
     );
 
     sig = wave * env;
@@ -51,18 +51,33 @@ s.waitForBoot({
 
   1.wait;
 
-  [0, 2, 4, 6, 8, 6, 4, 2, 0].do({
+  [0].do({
     arg pitch;
+    var reverse, startPos, rateReverse;
+
+    reverse = false;
+
+    if (
+      reverse == true,
+      {
+        rateReverse = -1;
+        startPos = amenWav.duration;
+      },
+      {
+        rateReverse = 1;
+        startPos = 0;
+      }
+    );
 
     Synth.new(\amen, [
       buf: amenWav,
-      rate: pitch.midiratio * -1,
-      loop: 1,
-      // startPos: 1.5 * amenWav.sampleRate,
-      startPos: amenWav.duration * amenWav.sampleRate,
-      // pan: [-1, 1, 0.5],
+      rate: pitch.midiratio * rateReverse,
+      loop: 0,
+      startPos: startPos * amenWav.sampleRate,
+      // startPos: amenWav.duration * amenWav.sampleRate,
+      pan: [-1, 1, 0.5],
       // attack: 0.02,
-      times: [0.2, 3]
+      times: [0.2, 3],
     ]);
     0.3.wait;
   });
