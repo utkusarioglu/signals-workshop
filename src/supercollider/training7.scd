@@ -12,7 +12,8 @@ s.waitForBoot({
     synth,
     getAsset,
     sequence,
-    routine
+    routine,
+    t
     ;
 
   getAsset = {
@@ -70,7 +71,13 @@ s.waitForBoot({
 
   1.wait;
   
+  t = TempoClock.new(100/60).permanent_(true);
+
+  t.beats.postln;
+  t.beatsPerBar.postln;
+
   routine = Routine.new({
+    "play".postln;
     sequence = [0, 4, 7, 11];
 
     sequence.do({
@@ -94,12 +101,15 @@ s.waitForBoot({
       yield(1/4);
     });
   });
+  
+  t.sched(2, { routine.play; 2}); 
+  t.sched(6, { routine.play; 2}); 
 
-  routine.play;
+  // routine.play;
 
-  4.wait;
-  routine.reset;
-  routine.play;
+  // 4.wait;
+  // routine.reset;
+  // routine.play;
   
   // synth.set(\times, [2, 6]);
 
