@@ -1,22 +1,25 @@
 s.boot;
 
-s.meter;
+s.plotTree;
+// s.freqscope;
 
 s.waitForBoot({
   var synthDefs, music;
 
   synthDefs = {
     SynthDef(\s1s, {
-      arg freq, amp, channel;
+      arg freq, amp, channel, gate = 1;
       var sig, env;
 
       env = EnvGen.kr(
         envelope: Env(
-          levels: [0, 1, 0],
-          times: [0.02, 0.05, 0.1],
+          levels: [0, 1, 0.2, 0],
+          times: [0.01, 0.03, 0.05, 1],
           curve: 1,
+          releaseNode: 2,
         ),
-        gate: 1,
+        // envelope: Env.adsr(),
+        gate: gate,
         doneAction: Done.freeSelf,
       );
 
@@ -33,7 +36,7 @@ s.waitForBoot({
 
     rIncrement = Routine({
       var root, increment;
-      root = 60;
+      root = 48;
       increment = 0;
 
       inf.do({
@@ -61,7 +64,7 @@ s.waitForBoot({
           instrument: \s1s, 
           freq: rIncrement.next.midicps, 
           amp: 0.2, 
-          channel: 0
+          channel: 1,
         ).play;
 
         (1/4).yield
@@ -74,7 +77,7 @@ s.waitForBoot({
           instrument: \s1s, 
           freq: rDecrement.next.midicps, 
           amp: 0.2, 
-          channel: 1
+          channel: 0,
         ).play;
 
         (1/4).yield
@@ -88,5 +91,4 @@ s.waitForBoot({
   synthDefs.();
   wait(1);
   music.();
-
 });
