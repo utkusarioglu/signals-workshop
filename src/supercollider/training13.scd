@@ -57,16 +57,25 @@ s.waitForBoot({
 
     p = Pbind(
       \instrument, \thing,
-      \dur, Pexprand(0.1, 0.3, inf),
+      // \dur, Pexprand(0.1, 0.3, inf),
       \sustain, Pwhite(3.0, 6.0, inf),
-      \freq, Pwhite(1, 16, inf) * Prand([48, 55], inf),
+
+      // \freq, Pwhite(1, 16, inf) * Prand([48, 55], inf),
+      \degree, Pseq([0, 3, 5, 7], inf),
+      // \note, Pseq([0, 1, 2,3], inf),
+      // \midinote, Pseq([0, 1, 2,3] + 60, inf),
+      \dur, Pseq([1/2, 1/4, 1/4, 1], inf),
+
       \harm, Pexprand(1, 10),
       \width, Pexprand(0.05, 0.7, inf),
-      \amp, Pkey(\freq).linlin(48, 16*55, 0.5, 0.1).trace,
       \pan, Pmeanrand(-1, 1, inf),
-      \slev, 1,
-      \atk, 3,
-      \rel, 3,
+      \atk, 0.01,
+      \dev, 0.08,
+      \slev, 0,
+      \rel, 0,
+
+      // \amp, Pkey(\freq).linlin(48, 16*55, 0.5, 0.1),
+      \db, Pseq([0, -4, -8, -12], inf),
     );
 
     "Starting…".postln;
