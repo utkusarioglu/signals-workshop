@@ -1,27 +1,50 @@
 s.boot;
 
 s.waitForBoot({
-  var m, music, allOff;
+  var createMidiPorts, midiPorts, midi, silenceAll;
 
-  MIDIClient.init;
-  MIDIClient.destinations;
+  createMidiPorts = {
+    arg portCount, portPrefix;
+    var ports;
 
-  m = MIDIOut.newByName("LoopBe Internal MIDI", "LoopBe Internal MIDI");
+    ports = Array.newClear(portCount);
 
-  allOff = {
-    (0..127).do({
-      arg note;
-      (
-        type: \midi,
-        midiout: m,
-        midicmd: \noteOff,
-        midinote: note,
-      ).play;
-      // m.noteOff(0, note, 60);
+    MIDIClient.init;
+    MIDIClient.destinations;
+
+    portCount.do({
+      arg i;
+      var portName;
+
+      portName = portPrefix ++ i;
+      ports[i] = MIDIOut.newByName(portName, portName);
+    });
+
+    ports;
+  };
+
+  midiPorts = createMidiPorts.(
+    portCount: 2,
+    portPrefix: "loopMIDI ",
+  );
+
+  silenceAll = {
+    midiPorts.do({
+      arg midiPort;
+      (0..127).do({
+        arg note;
+        (
+          type: \midi,
+          midiout: midiPort,
+          midicmd: \noteOff,
+          midinote: note,
+        ).play;
+        // m.noteOff(0, note, 60);
+      });
     });
   };
 
-  music = {
+  midi = {
     // var r;
 
     // r = Routine({
@@ -47,24 +70,77 @@ s.waitForBoot({
     // });
 
     // r.play;
-    var p, q;
+    var pBass, pAll, qAll;
+    var kick, snare, openHihat, pDrums, closedHihat;
 
-    p = Pbind(
+    pAll = [];
+    pBass = [];
+    pDrums = [];
+    qAll = [];
+    kick = 36;
+    snare = 39;
+    closedHihat = 62;
+    openHihat = 60;
+
+    pBass = pBass.add(Pbind(
       \type, \midi,
-      \midiout, m,
+      \chan, 1,
+      \midiout, midiPorts[1],
       \midicmd, \noteOn,
-      \midinote, Pwhite(40, 52, inf),
-      \amp, Pexprand(0.1, 0.5, inf),
-      \sustain, 0.8,
-      \dur, Prand([0.2, 0.4], inf),
-    );
+      // \midinote, Pwhite(60, 72, inf),
+      \midinote, Pseq([0, 3, 7, 12, 15] + 48,inf),
+      \amp, Pseq([0.9, 0.5, 0.6], inf),
+      \sustain, 1/4,
+      \dur, 1/4,
+    ));
 
-    q = p.play;
-    wait(10);
-    q.stop;
-    allOff.();
+    pDrums = pDrums.add(Pbind(
+      \type, \midi,
+      \chan, 10,
+      \midiout, midiPorts[0],
+      \midicmd, \noteOn,
+      \midinote, Pseq([1, 0] * kick, inf),
+      \amp, Pn(Pseq([0.7, 0.6], 8), inf),
+      \sustain, 0.1,
+      \dur, 1/2,
+    ));
+
+    pDrums = pDrums.add(Pbind(
+      \type, \midi,
+      \chan, 10,
+      \midiout, midiPorts[0],
+      \midicmd, \noteOn,
+      \midinote, Pseq([0, 1] * snare, inf),
+      \amp, Pn(Pseq([0.8, 0.5], 8), inf),
+      \sustain, 0.1,
+      \dur, 1/2,
+    ));
+
+    pDrums = pDrums.add(Pbind(
+      \type, \midi,
+      \chan, 10,
+      \midiout, midiPorts[0],
+      \midicmd, \noteOn,
+      \midinote, Pseq([closedHihat, openHihat], inf),
+      \amp, Pn(Pseq([0.6, 0.4], 8), inf),
+      \sustain, 0.1,
+      \dur, 1/4,
+    ));
+
+    pAll = pBass ++ pDrums;
+
+    pAll.do({
+      arg p;
+      qAll = qAll.add(p.play);
+    });
+    wait(8);
+    // qAll.do({
+    //   arg q;
+    //   q.stop;
+    // });
+    silenceAll.();
   };
   
-  allOff.();
-  music.();
+  silenceAll.();
+  midi.();
 });
