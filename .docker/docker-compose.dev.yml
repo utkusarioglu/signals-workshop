@@ -9,6 +9,8 @@ services:
     extra_hosts:
       supercollider: host-gateway
       touch_osc: host-gateway
+    ports:
+      - 5000:5000
     # devices:
     #   - $PULSE_SERVER:/dev/snd
     environment:
