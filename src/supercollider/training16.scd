@@ -4,27 +4,27 @@ s.waitForBoot({
   var createMidiPorts, midiPorts, midi, silenceAll;
 
   createMidiPorts = {
-    arg portCount, portPrefix;
+    arg portList, portPrefix;
     var ports;
 
-    ports = Array.newClear(portCount);
+    ports = Dictionary.new;
 
     MIDIClient.init;
     MIDIClient.destinations;
 
-    portCount.do({
-      arg i;
+    portList.do({
+      arg descriptor;
       var portName;
 
-      portName = portPrefix ++ i;
-      ports[i] = MIDIOut.newByName(portName, portName);
+      portName = portPrefix ++ descriptor;
+      ports[descriptor.toLower()] = MIDIOut.newByName(portName, portName);
     });
 
     ports;
   };
 
   midiPorts = createMidiPorts.(
-    portCount: 2,
+    portList: ["Drums", "Piano", "Bass"],
     portPrefix: "loopMIDI ",
   );
 
@@ -85,7 +85,7 @@ s.waitForBoot({
     pBass = pBass.add(Pbind(
       \type, \midi,
       \chan, 1,
-      \midiout, midiPorts[1],
+      \midiout, midiPorts["bass"],
       \midicmd, \noteOn,
       // \midinote, Pwhite(60, 72, inf),
       \midinote, Pseq([0, 3, 7, 12, 15] + 48,inf),
@@ -97,7 +97,7 @@ s.waitForBoot({
     pDrums = pDrums.add(Pbind(
       \type, \midi,
       \chan, 10,
-      \midiout, midiPorts[0],
+      \midiout, midiPorts["drums"],
       \midicmd, \noteOn,
       \midinote, Pseq([1, 0] * kick, inf),
       \amp, Pn(Pseq([0.7, 0.6], 8), inf),
@@ -108,7 +108,7 @@ s.waitForBoot({
     pDrums = pDrums.add(Pbind(
       \type, \midi,
       \chan, 10,
-      \midiout, midiPorts[0],
+      \midiout, midiPorts["drums"],
       \midicmd, \noteOn,
       \midinote, Pseq([0, 1] * snare, inf),
       \amp, Pn(Pseq([0.8, 0.5], 8), inf),
@@ -119,7 +119,7 @@ s.waitForBoot({
     pDrums = pDrums.add(Pbind(
       \type, \midi,
       \chan, 10,
-      \midiout, midiPorts[0],
+      \midiout, midiPorts["drums"],
       \midicmd, \noteOn,
       \midinote, Pseq([closedHihat, openHihat], inf),
       \amp, Pn(Pseq([0.6, 0.4], 8), inf),
@@ -134,10 +134,10 @@ s.waitForBoot({
       qAll = qAll.add(p.play);
     });
     wait(8);
-    // qAll.do({
-    //   arg q;
-    //   q.stop;
-    // });
+    qAll.do({
+      arg q;
+      q.stop;
+    });
     silenceAll.();
   };
   
