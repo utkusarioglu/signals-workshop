@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <style>
+      input[orient=vertical] {
+        appearance: slider-vertical;
+      }
+
+      .range-container {
+        margin: 1rem;
+      }
+
+      .range {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #range-1 {
+        width: 20px;
+        height: 300px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="range-container">
+      <div class="range">
+        <input id="range-1" type="range" min="0" max="127" step="1" orient="vertical" />
+        <label for="range-1">1</label>
+      </div>
+    </div>
+
+    <script>
+      const socket = new WebSocket("ws://192.168.1.151:5000/ws");
+
+      socket.addEventListener("open", () => { console.log("Socket open"); });
+      socket.addEventListener("close", () => { console.log("Socket close"); });
+      socket.addEventListener("error", () => { console.log("Socket error"); });
+      socket.addEventListener("message", (e) => { console.log("Socket message", e); });
+
+      document.querySelector("#range-1").addEventListener("input", (e) => {
+        socket.send(e.target.value);
+      });
+    </script>
+  </body>
+
+</html>
