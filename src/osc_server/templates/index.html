@@ -2,12 +2,26 @@
 <html>
 
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=2.0">
     <style>
+      body {
+        background-color: #222;
+      }
+
+      label {
+        color: #fff
+      }
+
       input[orient=vertical] {
         appearance: slider-vertical;
       }
 
+      .hidden {
+        display: none;
+      }
+
       .range-container {
+        display: flex;
         margin: 1rem;
       }
 
@@ -15,9 +29,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 3em;
       }
 
-      #range-1 {
+      .range-input {
         width: 20px;
         height: 300px;
       }
@@ -26,11 +41,15 @@
   </head>
 
   <body>
-    <div class="range-container">
+    <div class="range-template hidden">
       <div class="range">
-        <input id="range-1" type="range" min="0" max="127" step="1" orient="vertical" />
-        <label for="range-1">1</label>
+        <input class="range-input" type="range" min="0" max="127" step="1" orient="vertical" />
+        <label class="range-label"></label>
       </div>
+    </div>
+
+    <div class="range-container">
+      <!-- Place ranges here -->
     </div>
 
     <script>
@@ -41,8 +60,30 @@
       socket.addEventListener("error", () => { console.log("Socket error"); });
       socket.addEventListener("message", (e) => { console.log("Socket message", e); });
 
-      document.querySelector("#range-1").addEventListener("input", (e) => {
-        socket.send(e.target.value);
+      const getInputId = (i) => {
+        return `range-${i}-input`;
+      };
+
+      const template = document.querySelector(".range-template .range");
+      const container = document.querySelector(".range-container");
+      const ranges = Array(8).fill(null).map((_, i) => {
+        const range = template.cloneNode(true);
+        const inputId = getInputId(i);
+        const rangeInputDiv = range.querySelector(".range-input");
+        const rangeLabelDiv = range.querySelector(".range-label");
+        rangeInputDiv.id = inputId;
+        rangeLabelDiv.htmlFor = inputId;
+        rangeLabelDiv.innerText = i;
+        container.appendChild(range);
+        return range;
+      });
+
+      const listeners = ranges.map((range, i) => {
+        const inputId = getInputId(i);
+        document.querySelector(`#${inputId}`).addEventListener("input", (e) => {
+          const message = [i, parseInt(e.target.value)];
+          socket.send(JSON.stringify(message));
+        });
       });
     </script>
   </body>
