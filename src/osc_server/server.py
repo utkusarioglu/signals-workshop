@@ -5,7 +5,7 @@ import json
 
 app = Flask(__name__)
 sock = Sock(app)
-client = udp_client.SimpleUDPClient("192.168.1.151", 57123)
+client = udp_client.SimpleUDPClient("192.168.1.151", 57121)
 
 
 @app.route("/")
