@@ -16,6 +16,8 @@ def root():
 @sock.route("/ws")
 def ws_supercollider(socket):
     while True:
-        value = socket.receive()
-        print(value)
-        client.send_message("/cc", json.loads(value))
+        transmission = json.loads(socket.receive())
+        path = f"/{transmission[0]}"
+        values = transmission[1:3]
+        print(path, values)
+        client.send_message(path, values)

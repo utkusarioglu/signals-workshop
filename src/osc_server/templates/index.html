@@ -6,8 +6,14 @@
     <style>
       body {
         background-color: #222;
+        font-family: 'Roboto', sans-serif;
       }
 
+      h1 {
+        margin-top: 0;
+      }
+
+      h1,
       label {
         color: #fff
       }
@@ -20,35 +26,104 @@
         display: none;
       }
 
+      .range-group {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        border: 1px #333 solid;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-radius: 2rem;
+        width: max-content;
+      }
+
       .range-container {
         display: flex;
-        margin: 1rem;
+      }
+
+      .range-controls {
+        display: grid;
+        grid-template-columns: min-content 3rem;
+        grid-template-rows: min-content 1fr min-content;
+        align-items: center;
       }
 
       .range {
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 3em;
+        padding-right: 1rem;
       }
 
-      .range-input {
-        width: 20px;
+      .range:last-child {
+        padding-right: 0;
+      }
+
+      .range-input.slider {
+        grid-column-start: 1;
+        grid-row-start: 1;
+        grid-row-end: 4;
+        width: 2rem;
         height: 300px;
       }
 
+      .range-input.full-button,
+      .range-input.half-button,
+      .range-input.none-button {
+        grid-column-start: 2;
+
+        background-color: #333;
+        color: #FFF;
+        border: none;
+        border-radius: 2rem;
+        padding: 0.5rem;
+      }
+
+      .range-input.full-button:active,
+      .range-input.half-button:active,
+      .range-input.none-button:active {
+        background-color: #555;
+      }
+
+      .range-label-decoration {
+        background-color: #333;
+        width: 100%;
+        text-align: center;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        margin-top: 1rem;
+        border-radius: 2rem;
+      }
+
     </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   </head>
 
   <body>
     <div class="range-template hidden">
+
       <div class="range">
-        <input class="range-input" type="range" min="0" max="127" step="1" orient="vertical" />
-        <label class="range-label"></label>
+        <div class="range-controls">
+          <input class="range-input slider" type="range" min="0" max="127" step="1" orient="vertical" />
+          <button class="range-input full-button">127</button>
+          <button class="range-input half-button">64</button>
+          <button class="range-input none-button">0</button>
+        </div>
+        <div class="range-label-decoration">
+          <label class="range-label"></label>
+        </div>
       </div>
+
+      <div class="range-group">
+        <h1 class="title"></h1>
+        <div class="range-container"></div>
+      </div>
+
     </div>
 
-    <div class="range-container">
+    <div class="range-group-container">
       <!-- Place ranges here -->
     </div>
 
@@ -60,31 +135,85 @@
       socket.addEventListener("error", () => { console.log("Socket error"); });
       socket.addEventListener("message", (e) => { console.log("Socket message", e); });
 
-      const getInputId = (i) => {
-        return `range-${i}-input`;
+      const getInputId = (title, i) => {
+        return `range-${title}-${i}-input`;
       };
 
-      const template = document.querySelector(".range-template .range");
-      const container = document.querySelector(".range-container");
-      const ranges = Array(8).fill(null).map((_, i) => {
-        const range = template.cloneNode(true);
-        const inputId = getInputId(i);
-        const rangeInputDiv = range.querySelector(".range-input");
-        const rangeLabelDiv = range.querySelector(".range-label");
-        rangeInputDiv.id = inputId;
-        rangeLabelDiv.htmlFor = inputId;
-        rangeLabelDiv.innerText = i;
-        container.appendChild(range);
-        return range;
-      });
+      const rangeTemplate = document.querySelector(".range-template .range");
+      const rangeGroupTemplate = document.querySelector(".range-group");
+      const rangeGroupContainer = document.querySelector(".range-group-container");
 
-      const listeners = ranges.map((range, i) => {
-        const inputId = getInputId(i);
-        document.querySelector(`#${inputId}`).addEventListener("input", (e) => {
-          const message = [i, parseInt(e.target.value)];
-          socket.send(JSON.stringify(message));
+      function rangeGroupFactory(title, ranges) {
+        const rangeGroup = rangeGroupTemplate.cloneNode(true);
+        rangeGroup.querySelector(".title").innerText = title;
+        const rangeContainer = rangeGroup.querySelector(".range-container");
+        ranges.forEach((range) => {
+          rangeContainer.appendChild(range.node);
         });
-      });
+        return {
+          node: rangeGroup,
+          ranges
+        };
+      }
+
+      function rangeFactory(path, count) {
+        const ranges = Array(8).fill(null).map((_, i) => {
+          const node = rangeTemplate.cloneNode(true);
+          const inputId = getInputId(path, i);
+          const rangeInputSliderDiv = node.querySelector(".range-input.slider");
+          const rangeLabelDiv = node.querySelector(".range-label");
+          rangeInputSliderDiv.id = inputId;
+          rangeLabelDiv.htmlFor = inputId;
+          rangeLabelDiv.innerText = i;
+
+          const sliderListener = rangeInputSliderDiv.addEventListener("input", (e) => {
+            const message = [path, i, parseInt(e.target.value)];
+            socket.send(JSON.stringify(message));
+          });
+
+          const buttons = [
+            {
+              value: 127,
+              buttonNode: node.querySelector(".range-input.full-button")
+            },
+            {
+              value: 64,
+              buttonNode: node.querySelector(".range-input.half-button")
+            },
+            {
+              value: 0,
+              buttonNode: node.querySelector(".range-input.none-button")
+            }
+          ].map(({ value, buttonNode }) => {
+            return buttonNode.addEventListener("click", () => {
+              const message = [path, i, value];
+              rangeInputSliderDiv.value = value;
+              socket.send(JSON.stringify(message));
+            });
+
+          });
+
+
+          return {
+            node: node,
+            listeners: {
+              slider: sliderListener,
+              buttons
+            }
+          };
+        });
+
+        return ranges;
+      }
+
+      const rangesCC = rangeFactory("cc", 8);
+      const rangeGroupCC = rangeGroupFactory("Control Change", rangesCC);
+      const rangesSynth = rangeFactory("synth", 8);
+      const rangeGroupSynth = rangeGroupFactory("Synth", rangesSynth);
+
+      rangeGroupContainer.appendChild(rangeGroupCC.node);
+      rangeGroupContainer.appendChild(rangeGroupSynth.node);
+
     </script>
   </body>
 
