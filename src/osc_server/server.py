@@ -3,9 +3,17 @@ from pythonosc import udp_client
 from flask_sock import Sock
 import json
 
+
+def createUdpClient():
+    with open("../../.langPort", "r") as specs:
+        langPort = int(specs.read())
+        print(f"langport: {langPort}")
+        return udp_client.SimpleUDPClient("192.168.1.151", langPort)
+
+
 app = Flask(__name__)
 sock = Sock(app)
-client = udp_client.SimpleUDPClient("192.168.1.151", 57121)
+client = createUdpClient()
 
 
 @app.route("/")

@@ -7,6 +7,7 @@
       body {
         background-color: #222;
         font-family: 'Roboto', sans-serif;
+        margin: 0;
       }
 
       h1 {
@@ -34,6 +35,7 @@
         margin-bottom: 1rem;
         border-radius: 2rem;
         width: max-content;
+        margin: 1rem;
       }
 
       .range-container {
@@ -94,6 +96,25 @@
         border-radius: 2rem;
       }
 
+      .banner-container {
+        display: none
+      }
+
+      .banner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .banner .banner-content {
+        padding: 1rem;
+      }
+
+      .banner.disconnected {
+        background-color: #500;
+        color: #FFF;
+      }
+
     </style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -102,13 +123,19 @@
   </head>
 
   <body>
+    <div class="banner-container">
+      <div class="banner disconnected">
+        <span class="banner-content">Disconnected</span>
+      </div>
+    </div>
+
     <div class="range-template hidden">
 
       <div class="range">
         <div class="range-controls">
-          <input class="range-input slider" type="range" min="0" max="127" step="1" orient="vertical" />
-          <button class="range-input full-button">127</button>
-          <button class="range-input half-button">64</button>
+          <input class="range-input slider" type="range" min="0" max="100" step="1" orient="vertical" />
+          <button class="range-input full-button">100</button>
+          <button class="range-input half-button">50</button>
           <button class="range-input none-button">0</button>
         </div>
         <div class="range-label-decoration">
@@ -129,11 +156,23 @@
 
     <script>
       const socket = new WebSocket("ws://192.168.1.151:5000/ws");
+      const bannerContainer = document.body.querySelector(".banner-container");
 
-      socket.addEventListener("open", () => { console.log("Socket open"); });
-      socket.addEventListener("close", () => { console.log("Socket close"); });
-      socket.addEventListener("error", () => { console.log("Socket error"); });
-      socket.addEventListener("message", (e) => { console.log("Socket message", e); });
+      socket.addEventListener("open", () => {
+        bannerContainer.style.display = "none";
+        // console.log("Socket open"); 
+      });
+      socket.addEventListener("close", () => {
+        bannerContainer.style.display = "block";
+        //  console.log("Socket close"); 
+      });
+      socket.addEventListener("error", () => {
+        bannerContainer.style.display = "block";
+        // console.log("Socket error"); 
+      });
+      socket.addEventListener("message", (e) => {
+        console.log("Socket message", e);
+      });
 
       const getInputId = (title, i) => {
         return `range-${title}-${i}-input`;
@@ -156,6 +195,12 @@
         };
       }
 
+      function sendMessage(path, i, value) {
+        const normalizedValue = value / 100;
+        const message = [path, i, normalizedValue];
+        socket.send(JSON.stringify(message));
+      }
+
       function rangeFactory(path, count) {
         const ranges = Array(8).fill(null).map((_, i) => {
           const node = rangeTemplate.cloneNode(true);
@@ -167,17 +212,16 @@
           rangeLabelDiv.innerText = i;
 
           const sliderListener = rangeInputSliderDiv.addEventListener("input", (e) => {
-            const message = [path, i, parseInt(e.target.value)];
-            socket.send(JSON.stringify(message));
+            sendMessage(path, i, e.target.value);
           });
 
           const buttons = [
             {
-              value: 127,
+              value: 100,
               buttonNode: node.querySelector(".range-input.full-button")
             },
             {
-              value: 64,
+              value: 50,
               buttonNode: node.querySelector(".range-input.half-button")
             },
             {
@@ -186,9 +230,8 @@
             }
           ].map(({ value, buttonNode }) => {
             return buttonNode.addEventListener("click", () => {
-              const message = [path, i, value];
               rangeInputSliderDiv.value = value;
-              socket.send(JSON.stringify(message));
+              sendMessage(path, i, value);
             });
 
           });
@@ -206,13 +249,17 @@
         return ranges;
       }
 
-      const rangesCC = rangeFactory("cc", 8);
-      const rangeGroupCC = rangeGroupFactory("Control Change", rangesCC);
+      // const rangesCC = rangeFactory("cc", 8);
+      // const rangeGroupCC = rangeGroupFactory("Control Change", rangesCC);
+      // rangeGroupContainer.appendChild(rangeGroupCC.node);
+
       const rangesSynth = rangeFactory("synth", 8);
       const rangeGroupSynth = rangeGroupFactory("Synth", rangesSynth);
-
-      rangeGroupContainer.appendChild(rangeGroupCC.node);
       rangeGroupContainer.appendChild(rangeGroupSynth.node);
+
+      const rangesReverb = rangeFactory("reverb", 8);
+      const rangeGroupReverb = rangeGroupFactory("Reverb", rangesReverb);
+      rangeGroupContainer.appendChild(rangeGroupReverb.node);
 
     </script>
   </body>
