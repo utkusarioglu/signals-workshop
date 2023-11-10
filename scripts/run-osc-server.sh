@@ -1,5 +1,5 @@
 SERVER_ABSPATH=$(pwd)/src/osc_server
-EXTRA_FILES="$SERVER_ABSPATH/templates/index.html:$(pwd)/.langPort"
+EXTRA_FILES="$SERVER_ABSPATH/templates/index.html:$(pwd)/.lang_port"
 
 cd "$SERVER_ABSPATH"
 

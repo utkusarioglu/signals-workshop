@@ -1,3 +1,5 @@
+// This one receives osc signals from both the web server and scamp
+
 o = ServerOptions.new;
 o.protocol_(\tcp);
 s = Server.remote(\remote, NetAddr("localhost", 57110), o); // set to correct address and port
@@ -7,14 +9,17 @@ Server.default = s;
 s.doWhenBooted({ 
   var synthDefs, portFile;
   var synthBusses, reverbBusses;
-  var p, q;
+  var r;
 
   portFile = File(File.getcwd ++ "/.lang_port", "w+");
   portFile.write("" ++ NetAddr.langPort);
   portFile.close;
 
   synthBusses = Bus.control(s, 8);
+  synthBusses.set(0.5, 0, 0, 0, 0.01, 1, 0.1, 0.1);
+
   reverbBusses = Bus.control(s, 8);
+  reverbBusses.set(0.3, 0.5, 0.5, 0.5, 0, 0, 0, 0);
 
   ("synthBusses:" + synthBusses.index).postln;
   ("reverbBusses:" + reverbBusses.index).postln;
@@ -49,12 +54,6 @@ s.doWhenBooted({
       rel = krs[7];
 
       env = EnvGen.kr(
-        // envelope: Env(
-        //   levels: [0, 1, 0.2, 0],
-        //   times: [0.01, 0.03, 0.05, 1],
-        //   curve: 1,
-        //   releaseNode: 2,
-        // ),
         envelope: Env.adsr(
           atk,
           dec,
@@ -144,14 +143,42 @@ s.doWhenBooted({
     in: 3,
   ).play;
 
-  p = Pbind(
-      \instrument, \saw3,
-      \midinote, Pseq([60, 62, 67, 69], 20),
-      \out, 3,
-      \synthCf, synthBusses,
-      \spreadThreshold, 10
-  );
-  q = p.play;
+  OSCdef(\melody, {
+    arg msg;
+    var sequence, speed;
+    sequence = msg;
+    sequence.removeAt(0);
+    speed = sequence.removeAt(0);
+
+    ("Speed:" + speed + "Length:" + sequence.size).postln;
+
+    r.stop;
+    r = Routine({
+      sequence.do({
+        arg value;
+
+        (
+          \instrument: \saw3,
+          \midinote: value,
+          \out: 3,
+          \synthCf: synthBusses,
+          \spreadThreshold: 100,
+        ).play;
+
+        yield(speed);
+      })
+    });
+    r.play;
+  }, "/melody");
+
+  // p = Pbind(
+  //     \instrument, \saw3,
+  //     \midinote, Pseq([60, 62, 67, 69], 20),
+  //     \out, 3,
+  //     \synthCf, synthBusses,
+  //     \spreadThreshold, 10
+  // );
+  // q = p.play;
 
   "ready".postln;
 });
