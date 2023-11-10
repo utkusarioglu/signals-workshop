@@ -5,9 +5,9 @@ import json
 
 
 def createUdpClient():
-    with open("../../.langPort", "r") as specs:
+    with open("../../.lang_port", "r") as specs:
         langPort = int(specs.read())
-        print(f"langport: {langPort}")
+        print(f"langPort: {langPort}")
         return udp_client.SimpleUDPClient("192.168.1.151", langPort)
 
 

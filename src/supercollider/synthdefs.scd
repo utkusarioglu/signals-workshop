@@ -9,7 +9,7 @@ s.doWhenBooted({
   var synthBusses, reverbBusses;
   var p, q;
 
-  portFile = File(File.getcwd ++ "/.langPort", "w+");
+  portFile = File(File.getcwd ++ "/.lang_port", "w+");
   portFile.write("" ++ NetAddr.langPort);
   portFile.close;
 
