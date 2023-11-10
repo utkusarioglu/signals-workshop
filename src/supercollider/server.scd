@@ -4,9 +4,11 @@ s.options.protocol = \tcp; // set to use tcp
 s.options.bindAddress = "0.0.0.0"; // allow connections from any address
 s.options.maxLogins = 32; // set to correct number of clients
 
-s.makeWindow;
+// s.makeWindow;
 s.scope;
-s.freqscope;
+// s.freqscope;
 
 s.boot;
 )
+s.plotTree
+s.freeAll
