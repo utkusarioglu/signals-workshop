@@ -16,7 +16,7 @@ s.doWhenBooted({
   portFile.close;
 
   synthBusses = Bus.control(s, 8);
-  synthBusses.set(0.5, 0, 0, 0, 0.01, 1, 0.1, 0.1);
+  synthBusses.set(0.8, 0, 0, 0, 0.01, 1, 0.1, 0.1);
 
   reverbBusses = Bus.control(s, 8);
   reverbBusses.set(0.3, 0.5, 0.5, 0.5, 0, 0, 0, 0);
@@ -145,12 +145,17 @@ s.doWhenBooted({
 
   OSCdef(\melody, {
     arg msg;
-    var sequence, speed;
+    var sequence, speed, tempo, root;
+
     sequence = msg;
     sequence.removeAt(0);
+    tempo = sequence.removeAt(0);
     speed = sequence.removeAt(0);
+    root = sequence.removeAt(0);
 
-    ("Speed:" + speed + "Length:" + sequence.size).postln;
+    TempoClock.tempo = tempo / 60;
+
+    ("Tempo:" + tempo + "Speed:" + speed + "Root:" + root + "Length:" + sequence.size).postln;
 
     r.stop;
     r = Routine({
@@ -159,7 +164,7 @@ s.doWhenBooted({
 
         (
           \instrument: \saw3,
-          \midinote: value,
+          \midinote: root + value,
           \out: 3,
           \synthCf: synthBusses,
           \spreadThreshold: 100,
