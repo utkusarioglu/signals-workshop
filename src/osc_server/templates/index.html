@@ -3,6 +3,9 @@
 
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=2.0">
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
+      integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+      crossorigin="anonymous"></script>
     <style>
       body {
         background-color: #222;
@@ -100,20 +103,20 @@
         display: none
       }
 
-      .banner {
+      .banner-content-wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
+        color: #FFF;
       }
 
-      .banner .banner-content {
+      .banner-content-wrapper .banner-content {
         padding: 1rem;
       }
 
-      .banner.disconnected {
+      /* .banner-content-wrapper.disconnected {
         background-color: #500;
-        color: #FFF;
-      }
+      } */
 
     </style>
 
@@ -124,7 +127,7 @@
 
   <body>
     <div class="banner-container">
-      <div class="banner disconnected">
+      <div class="banner-content-wrapper">
         <span class="banner-content">Disconnected</span>
       </div>
     </div>
@@ -154,25 +157,80 @@
       <!-- Place ranges here -->
     </div>
 
-    <script>
-      const socket = new WebSocket("ws://192.168.1.151:5000/ws");
-      const bannerContainer = document.body.querySelector(".banner-container");
+    <script type="text/javascript" charset="utf-8">
+      class Banner {
+        constructor() {
+          this.container = document.body.querySelector(".banner-container");
+          this.wrapper = this.container.querySelector(".banner-content-wrapper");
+          this.content = this.wrapper.querySelector(".banner-content");
+        }
 
-      socket.addEventListener("open", () => {
-        bannerContainer.style.display = "none";
-        // console.log("Socket open"); 
+        set(type, message, timer = 0) {
+          this._setContentType(type);
+          this._setContent(message);
+          this._setVisible();
+
+          if (timer > 0)
+          {
+            setTimeout(() => {
+              this.remove();
+            }, timer);
+          }
+        }
+
+        remove() {
+          this._setHidden();
+          this._clearContent();
+        }
+
+        _setContentType(type) {
+          const s = this.wrapper.style;
+          switch (type)
+          {
+            case "success":
+              s.backgroundColor = "green";
+              break;
+            case "error":
+              s.backgroundColor = "red";
+              break;
+            default:
+              s.backgroundColor = "transparent";
+              console.error("Unrecognized banner type:", type);
+          }
+        }
+
+        _setVisible() {
+          this.container.style.display = "block";
+        }
+
+        _setHidden() {
+          this.container.style.display = "none";
+        }
+
+        _clearContent() {
+          this.content.innerText = "";
+        }
+
+        _setContent(message) {
+          this.content.innerText = message;
+        }
+      }
+
+      const socket = io();
+      const banner = new Banner();
+
+      socket.on('connect', function () {
+        banner.set("success", "Connected", 1000);
       });
-      socket.addEventListener("close", () => {
-        bannerContainer.style.display = "block";
-        //  console.log("Socket close"); 
+
+      socket.on("disconnect", () => {
+        banner.set("error", "Disconnected");
       });
-      socket.addEventListener("error", () => {
-        bannerContainer.style.display = "block";
-        // console.log("Socket error"); 
-      });
-      socket.addEventListener("message", (e) => {
-        console.log("Socket message", e);
-      });
+
+      function sendMessage(path, channel, rawValue) {
+        const value = rawValue / 100;
+        socket.emit("json", { path, channel, value });
+      }
 
       const getInputId = (title, i) => {
         return `range-${title}-${i}-input`;
@@ -195,24 +253,18 @@
         };
       }
 
-      function sendMessage(path, i, value) {
-        const normalizedValue = value / 100;
-        const message = [path, i, normalizedValue];
-        socket.send(JSON.stringify(message));
-      }
-
       function rangeFactory(path, count) {
-        const ranges = Array(8).fill(null).map((_, i) => {
+        const ranges = Array(8).fill(null).map((_, channel) => {
           const node = rangeTemplate.cloneNode(true);
-          const inputId = getInputId(path, i);
+          const inputId = getInputId(path, channel);
           const rangeInputSliderDiv = node.querySelector(".range-input.slider");
           const rangeLabelDiv = node.querySelector(".range-label");
           rangeInputSliderDiv.id = inputId;
           rangeLabelDiv.htmlFor = inputId;
-          rangeLabelDiv.innerText = i;
+          rangeLabelDiv.innerText = channel;
 
           const sliderListener = rangeInputSliderDiv.addEventListener("input", (e) => {
-            sendMessage(path, i, e.target.value);
+            sendMessage(path, channel, e.target.value);
           });
 
           const buttons = [
@@ -231,7 +283,7 @@
           ].map(({ value, buttonNode }) => {
             return buttonNode.addEventListener("click", () => {
               rangeInputSliderDiv.value = value;
-              sendMessage(path, i, value);
+              sendMessage(path, channel, value);
             });
 
           });
@@ -249,15 +301,15 @@
         return ranges;
       }
 
-      // const rangesCC = rangeFactory("cc", 8);
-      // const rangeGroupCC = rangeGroupFactory("Control Change", rangesCC);
-      // rangeGroupContainer.appendChild(rangeGroupCC.node);
+      const rangesCC = rangeFactory("cc", 8);
+      const rangeGroupCC = rangeGroupFactory("Control Change", rangesCC);
+      rangeGroupContainer.appendChild(rangeGroupCC.node);
 
-      const rangesSynth = rangeFactory("synth", 8);
+      const rangesSynth = rangeFactory("/synth", 8);
       const rangeGroupSynth = rangeGroupFactory("Synth", rangesSynth);
       rangeGroupContainer.appendChild(rangeGroupSynth.node);
 
-      const rangesReverb = rangeFactory("reverb", 8);
+      const rangesReverb = rangeFactory("/reverb", 8);
       const rangeGroupReverb = rangeGroupFactory("Reverb", rangesReverb);
       rangeGroupContainer.appendChild(rangeGroupReverb.node);
 

@@ -1,7 +1,6 @@
 from flask import Flask, render_template
+from flask_socketio import SocketIO
 from pythonosc import udp_client
-from flask_sock import Sock
-import json
 
 
 def createUdpClient():
@@ -12,8 +11,9 @@ def createUdpClient():
 
 
 app = Flask(__name__)
-sock = Sock(app)
-client = createUdpClient()
+app.config["SECRET_KEY"] = "a"
+socketio = SocketIO(app)
+osc_client = createUdpClient()
 
 
 @app.route("/")
@@ -21,11 +21,9 @@ def root():
     return render_template("index.html")
 
 
-@sock.route("/ws")
-def ws_supercollider(socket):
-    while True:
-        transmission = json.loads(socket.receive())
-        path = f"/{transmission[0]}"
-        values = transmission[1:3]
-        print(path, values)
-        client.send_message(path, values)
+@socketio.on("json")
+def ws_supercollider(transmission):
+    path = transmission["path"]
+    values = [transmission["channel"], transmission["value"]]
+    print(path, values)
+    osc_client.send_message(path, values)
