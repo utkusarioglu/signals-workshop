@@ -64,7 +64,7 @@ s.doWhenBooted({
         doneAction: Done.freeSelf,
       );
 
-      sinSig = SinOsc.ar([
+      sinSig = Pulse.ar([
         freq, 
         freq + (sinSpread),
         freq + (sinSpread * 2),
@@ -84,6 +84,7 @@ s.doWhenBooted({
       sig = sig.sum / 2;
 
       sig = sig * env;
+      sig = sig ! 2;
 
       Out.ar(out, sig); 
     }).add;
@@ -145,33 +146,42 @@ s.doWhenBooted({
 
   OSCdef(\melody, {
     arg msg;
-    var sequence, speed, tempo, root;
+    var sequence, speed, tempo, root, repeat;
 
     sequence = msg;
     sequence.removeAt(0);
     tempo = sequence.removeAt(0);
     speed = sequence.removeAt(0);
     root = sequence.removeAt(0);
+    repeat = sequence.removeAt(0);
 
     TempoClock.tempo = tempo / 60;
 
-    ("Tempo:" + tempo + "Speed:" + speed + "Root:" + root + "Length:" + sequence.size).postln;
+    (
+      "Tempo:" + tempo + 
+      "Speed:" + speed + 
+      "Root:" + root + 
+      "Repeat" + repeat + 
+      "Length:" + sequence.size
+    ).postln;
 
     r.stop;
     r = Routine({
-      sequence.do({
-        arg value;
+      repeat.do({
+        sequence.do({
+          arg value;
 
-        (
-          \instrument: \saw3,
-          \midinote: root + value,
-          \out: 3,
-          \synthCf: synthBusses,
-          \spreadThreshold: 100,
-        ).play;
+          (
+            \instrument: \saw3,
+            \midinote: root + value,
+            \out: 3,
+            \synthCf: synthBusses,
+            \spreadThreshold: 100,
+          ).play;
 
-        yield(speed);
-      })
+          yield(speed);
+        });
+      });
     });
     r.play;
   }, "/melody");
@@ -185,5 +195,5 @@ s.doWhenBooted({
   // );
   // q = p.play;
 
-  "ready".postln;
+  "Ready".postln;
 });
