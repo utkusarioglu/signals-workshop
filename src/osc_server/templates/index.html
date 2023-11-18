@@ -216,6 +216,16 @@
         }
       }
 
+      class Value {
+        static normalize(value) {
+          return value / 100;
+        }
+
+        static denormalize(value) {
+          return value * 100;
+        }
+      }
+
       const socket = io();
       const banner = new Banner();
 
@@ -228,7 +238,7 @@
       });
 
       function sendMessage(path, channel, rawValue) {
-        const value = rawValue / 100;
+        const value = Value.normalize(rawValue);
         socket.emit("json", { path, channel, value });
       }
 
@@ -253,13 +263,14 @@
         };
       }
 
-      function rangeFactory(path, count) {
-        const ranges = Array(8).fill(null).map((_, channel) => {
+      function rangeFactory(path, specs) {
+        const ranges = specs.map((defaultValue, channel) => {
           const node = rangeTemplate.cloneNode(true);
           const inputId = getInputId(path, channel);
           const rangeInputSliderDiv = node.querySelector(".range-input.slider");
           const rangeLabelDiv = node.querySelector(".range-label");
           rangeInputSliderDiv.id = inputId;
+          rangeInputSliderDiv.defaultValue = Value.denormalize(defaultValue);
           rangeLabelDiv.htmlFor = inputId;
           rangeLabelDiv.innerText = channel;
 
@@ -305,11 +316,14 @@
       // const rangeGroupCC = rangeGroupFactory("Control Change", rangesCC);
       // rangeGroupContainer.appendChild(rangeGroupCC.node);
 
-      const rangesSynth = rangeFactory("/synth", 8);
+      const SYNTH_SPECS = JSON.parse('{{synth_specs}}');
+      const REVERB_SPECS = JSON.parse('{{reverb_specs}}');
+
+      const rangesSynth = rangeFactory("/synth", SYNTH_SPECS);
       const rangeGroupSynth = rangeGroupFactory("Synth", rangesSynth);
       rangeGroupContainer.appendChild(rangeGroupSynth.node);
 
-      const rangesReverb = rangeFactory("/reverb", 8);
+      const rangesReverb = rangeFactory("/reverb", REVERB_SPECS);
       const rangeGroupReverb = rangeGroupFactory("Reverb", rangesReverb);
       rangeGroupContainer.appendChild(rangeGroupReverb.node);
 

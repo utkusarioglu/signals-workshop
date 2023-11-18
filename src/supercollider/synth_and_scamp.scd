@@ -7,19 +7,28 @@ s.addr.connect;
 Server.default = s;
 
 s.doWhenBooted({ 
-  var synthDefs, portFile;
-  var synthBusses, reverbBusses;
-  var r;
+  var synthDefs, createSpecsFile;
+  var synthBusses, reverbBusses, synthDefaults, reverbDefaults;
+  var routine, scdSpecs;
 
-  portFile = File(File.getcwd ++ "/.lang_port", "w+");
-  portFile.write("" ++ NetAddr.langPort);
-  portFile.close;
+  synthDefaults = [0.8, 0, 0, 0, 0.01, 1, 0.1, 0.1];
+  reverbDefaults = [0.3, 0.5, 0.5, 0.5, 0, 0, 0, 0];
+
+  createSpecsFile = {
+    arg specs;
+
+    var portFile;
+
+    portFile = File(File.getcwd ++ "/.scd_specs", "w+");
+    portFile.write(specs.asJSON);
+    portFile.close;
+  };
 
   synthBusses = Bus.control(s, 8);
-  synthBusses.set(0.8, 0, 0, 0, 0.01, 1, 0.1, 0.1);
+  synthBusses.setn(synthDefaults);
 
   reverbBusses = Bus.control(s, 8);
-  reverbBusses.set(0.3, 0.5, 0.5, 0.5, 0, 0, 0, 0);
+  reverbBusses.setn(reverbDefaults);
 
   ("synthBusses:" + synthBusses.index).postln;
   ("reverbBusses:" + reverbBusses.index).postln;
@@ -165,8 +174,8 @@ s.doWhenBooted({
       "Length:" + sequence.size
     ).postln;
 
-    r.stop;
-    r = Routine({
+    routine.stop;
+    routine = Routine({
       repeat.do({
         sequence.do({
           arg value;
@@ -183,17 +192,16 @@ s.doWhenBooted({
         });
       });
     });
-    r.play;
+    routine.play;
   }, "/melody");
 
-  // p = Pbind(
-  //     \instrument, \saw3,
-  //     \midinote, Pseq([60, 62, 67, 69], 20),
-  //     \out, 3,
-  //     \synthCf, synthBusses,
-  //     \spreadThreshold, 10
-  // );
-  // q = p.play;
+  scdSpecs = (
+    \langPort: NetAddr.langPort, 
+    \synth: synthDefaults, 
+    \reverb: reverbDefaults
+  );
+
+  createSpecsFile.(scdSpecs);
 
   "Ready".postln;
 });

@@ -12,4 +12,4 @@ __pycache__
 /.ignore
 *.log
 
-.lang_port
+.scd_specs

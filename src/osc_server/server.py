@@ -1,24 +1,34 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 from pythonosc import udp_client
+from json import loads
 
 
-def createUdpClient():
-    with open("../../.lang_port", "r") as specs:
-        langPort = int(specs.read())
-        print(f"langPort: {langPort}")
-        return udp_client.SimpleUDPClient("192.168.1.151", langPort)
+def getSpecs():
+    with open("../../.scd_specs", "r") as specs:
+        scd_config = loads(specs.read())
+        return scd_config
 
 
+def createUdpClient(scd_specs):
+    lang_port = scd_specs["langPort"]
+    return udp_client.SimpleUDPClient("192.168.1.151", lang_port)
+
+
+scd_specs = getSpecs()
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "a"
 socketio = SocketIO(app)
-osc_client = createUdpClient()
+osc_client = createUdpClient(scd_specs)
 
 
 @app.route("/")
 def root():
-    return render_template("index.html")
+    return render_template(
+        "index.html",
+        synth_specs=scd_specs["synth"],
+        reverb_specs=scd_specs["reverb"],
+    )
 
 
 @socketio.on("json")
