@@ -1,0 +1,8 @@
+includePaths:
+    -   C:\Users\utkus\AppData\Local\SuperCollider\downloaded-quarks\ScampUtils
+    -   C:\Users\utkus\AppData\Local\SuperCollider\downloaded-quarks\JSONlib
+    -   \\wsl.localhost\u-Boulanger\home\utkusarioglu\dev\workshops\signals-workshop\src\supercollider\extensions
+excludePaths:
+    []
+postInlineWarnings: true
+excludeDefaultPaths: false

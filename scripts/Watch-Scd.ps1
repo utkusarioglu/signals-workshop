@@ -14,7 +14,7 @@ function Watch-Scd {
   $FileChangeArgs = @{
     FileAbsPath = $FileAbspath
     WorkingDirectory = $WorkingDirectory
-    CallbackString = "sclang.exe ${FileAbspath}"
+    CallbackString = "sclang.exe -l sclang_conf.yaml ${FileAbspath}"
   }
 
   Watch-File @FileChangeArgs

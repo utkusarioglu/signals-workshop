@@ -3,7 +3,7 @@ version: "3.9"
 services:
   signals-workshop:
     # image: utkusarioglu/conda-music-devcontainer:1.0.15
-    image: utkusarioglu/conda-music-devcontainer:experiment-feat-music-sequencer-3
+    image: utkusarioglu/conda-music-devcontainer:experiment-feat-music-sequencer-8
     # image: utkusarioglu/conda-music-devcontainer:experiment-feature-pip-7
     # image: utkusarioglu/conda-music-devcontainer:experiment-feature-pip-33
     extra_hosts:
