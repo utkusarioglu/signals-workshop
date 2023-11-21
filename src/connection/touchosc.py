@@ -7,9 +7,8 @@ TOUCHOSC_CONNECTION_PROPS = {
     "port": 9000,
 }
 
-def test_run(
-    session, part, lowest, highest, step, intervals, repeat_count = 1
-):
+
+def test_run(session, part, lowest, highest, step, intervals, repeat_count=1):
     session.tempo = 40
     session.start_transcribing()
     sequence = [
