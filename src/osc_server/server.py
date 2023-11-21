@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 from pythonosc import udp_client
-from json import loads
+from json import loads, dumps
 
 
 def getSpecs():
@@ -26,8 +26,8 @@ osc_client = createUdpClient(scd_specs)
 def root():
     return render_template(
         "index.html",
-        synth_specs=scd_specs["synth"],
-        reverb_specs=scd_specs["reverb"],
+        synth_specs=dumps(scd_specs["synth"]),
+        reverb_specs=dumps(scd_specs["reverb"]),
     )
 
 

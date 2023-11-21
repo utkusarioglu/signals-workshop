@@ -265,7 +265,7 @@
       }
 
       function rangeFactory(path, specs) {
-        const ranges = specs.map((defaultValue, channel) => {
+        const ranges = specs.map(({ name, default: defaultValue }, channel) => {
           const node = rangeTemplate.cloneNode(true);
           const inputId = getInputId(path, channel);
           const rangeInputSliderDiv = node.querySelector(".range-input.slider");
@@ -273,7 +273,7 @@
           rangeInputSliderDiv.id = inputId;
           rangeInputSliderDiv.defaultValue = Value.denormalize(defaultValue);
           rangeLabelDiv.htmlFor = inputId;
-          rangeLabelDiv.innerText = channel;
+          rangeLabelDiv.innerText = name;
 
           const sliderListener = rangeInputSliderDiv.addEventListener("input", (e) => {
             sendMessage(path, channel, e.target.value);
@@ -317,8 +317,8 @@
       // const rangeGroupCC = rangeGroupFactory("Control Change", rangesCC);
       // rangeGroupContainer.appendChild(rangeGroupCC.node);
 
-      const SYNTH_SPECS = JSON.parse('{{synth_specs}}');
-      const REVERB_SPECS = JSON.parse('{{reverb_specs}}');
+      const SYNTH_SPECS = JSON.parse('{{ synth_specs | safe }}');
+      const REVERB_SPECS = JSON.parse('{{reverb_specs | safe }}');
 
       const rangesSynth = rangeFactory("/synth", SYNTH_SPECS);
       const rangeGroupSynth = rangeGroupFactory("Synth", rangesSynth);
