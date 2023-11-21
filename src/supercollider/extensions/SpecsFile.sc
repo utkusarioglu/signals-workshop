@@ -1,11 +1,25 @@
 SpecsFile {
-  *write {
-    arg specs;
+  classvar all;
+  
+  *initClass {
+    all = ();
+  }
+  
+  *includeKv { | key, value |
+    var d = Dictionary();
+    d.put(key, value);
+    all = all ++ d;
+  }
 
-    var portFile;
+  *includeDict { | dict |
+    all = all ++ dict;
+  }
 
-    portFile = File(File.getcwd ++ "/.scd_specs", "w+");
-    portFile.write(specs.asJSON);
-    portFile.close;
+  *publish {
+    var specsFile = File(File.getcwd ++ "/.scd_specs", "w+");
+    specsFile.write(all.asJSON);
+    specsFile.close;
+
+    "Specs published".postln;
   }
 }

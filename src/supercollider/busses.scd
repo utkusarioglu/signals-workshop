@@ -1,24 +1,36 @@
-var busses = { | server, defaults |
-  var dict = Dictionary();
-  var defaultValues = Dictionary();
+var publishAssignments = { | controlBusses |
+  "Control bus assignments:".postln;
 
-  defaultValues = defaults.collect({ |parts|
+  controlBusses.keys().do({ | key |
+    [
+      "  ", 
+      key, 
+      ": ", 
+      controlBusses[key].index
+    ].reduce('++').postln;
+  });
+};
+
+var getDefaultValues = { | defaults |
+   defaults.collect({ |parts|
     parts.collect({ |items|
       items[\default];
     });
   });
+};
+
+var busses = { | server, defaults |
+  var controlBusses = Dictionary();
+  var defaultValues = getDefaultValues.(defaults);
 
   defaults.keys().do({ |key|
-    dict[key] = Bus.control(server, defaults[key].size);
-    dict[key].setn(defaultValues[key]);
+    controlBusses[key] = Bus.control(server, defaults[key].size);
+    controlBusses[key].setn(defaultValues[key]);
   });
 
-  "Control bus assignments:".postln;
-  dict.keys().do({ | key |
-    (key ++ ":" + dict[key].index).postln;
-  });
+  publishAssignments.(controlBusses);
 
-  dict;
+  controlBusses;
 };
 
 busses;

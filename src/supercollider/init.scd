@@ -1,26 +1,17 @@
-// This one receives osc signals from both the web server and scamp
-
-o = ServerOptions.new;
-o.protocol_(\tcp);
-s = Server.remote(\remote, NetAddr("localhost", 57110), o); // set to correct address and port
-s.addr.connect;
-Server.default = s;
+Client.setup("localhost", 57110);
 
 s.doWhenBooted({ 
-  var workDir = File.getcwd ++ "/src/supercollider";
-  var defaults = (workDir ++ "/defaults.scd").load;
-  var busses = (workDir ++ "/busses.scd").load.(s, defaults);
-
-  (workDir ++ "/synthdefs.scd").load.();
-  (workDir ++ "/controldefs.scd").load.(busses);
+  var loader = Loader("src/supercollider");
+  var defaults = loader.load("defaults.scd");
+  var busses = loader.load("busses.scd").(s, defaults);
 
   s.freeAll;
 
-  (workDir ++ "/routinedefs.scd").load.(busses);
+  loader.load("synthdefs.scd").();
+  loader.load("controldefs.scd").(busses);
+  loader.load("routinedefs.scd").(busses);
 
-  SpecsFile.write(defaults ++ (
-    \langPort: NetAddr.langPort, 
-  ) );
-
-  "Ready".postln;
+  SpecsFile.includeDict(defaults);
+  SpecsFile.includeKv(\langPort, NetAddr.langPort);
+  SpecsFile.publish;
 });
