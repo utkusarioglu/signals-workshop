@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO
 from pythonosc import udp_client
 from json import loads, dumps
+from sys import stdout
 
 
 def getSpecs():
@@ -31,9 +32,14 @@ def root():
     )
 
 
+def print_osc_update(path: str, values: list[float]) -> None:
+    stdout.write(f"\rOSC: {path} {values}".ljust(40))
+    stdout.flush()
+
+
 @socketio.on("json")
 def ws_supercollider(transmission):
     path = transmission["path"]
     values = [transmission["channel"], transmission["value"]]
-    print(path, values)
     osc_client.send_message(path, values)
+    print_osc_update(path, values)

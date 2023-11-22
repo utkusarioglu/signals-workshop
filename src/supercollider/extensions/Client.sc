@@ -8,6 +8,6 @@ Client {
     server.addr.connect;
     Server.default = server;
 
-    ("Client connected to " ++ host ++ ":" ++ port).postln;
+    ["Client connected to '", host, ":", port, "'."].reduce('++').postln;
   }
 }

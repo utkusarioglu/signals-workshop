@@ -1,0 +1,54 @@
+{
+  "synth":[
+    {
+      "name":"Pulse Vol",
+      "default":0.8
+    },
+    {
+      "name":"Pulse Spread",
+      "default":0
+    },
+    {
+      "name":"Saw Vol",
+      "default":0
+    },
+    {
+      "name":"Saw Spread",
+      "default":0
+    },
+    {
+      "name":"Atk",
+      "default":0.01
+    },
+    {
+      "name":"Dec",
+      "default":1
+    },
+    {
+      "name":"Slev",
+      "default":0.1
+    },
+    {
+      "name":"Rel",
+      "default":0.1
+    }
+  ],
+  "reverb":[
+    {
+      "name":"Mix",
+      "default":0.3
+    },
+    {
+      "name":"Room",
+      "default":0.5
+    },
+    {
+      "name":"Damp",
+      "default":0.6
+    },
+    {
+      "name":"Amp",
+      "default":0.5
+    }
+  ]
+}

@@ -1,17 +1,18 @@
 Client.setup("localhost", 57110);
 
 s.doWhenBooted({ 
+  var defaults = Defaults("supercollider.config.json").load;
   var loader = Loader("src/supercollider");
-  var defaults = loader.load("defaults.scd");
-  var busses = loader.load("busses.scd").(s, defaults);
+  var busses = loader.load("control_busses.scd").(s, defaults);
 
   s.freeAll;
 
-  loader.load("synthdefs.scd").();
-  loader.load("controldefs.scd").(busses);
-  loader.load("routinedefs.scd").(busses);
-
   SpecsFile.includeDict(defaults);
   SpecsFile.includeKv(\langPort, NetAddr.langPort);
+
+  loader.load("synth_defs.scd").();
+  loader.load("control_defs.scd").(busses);
+  loader.load("routine_defs.scd").(busses);
+
   SpecsFile.publish;
 });

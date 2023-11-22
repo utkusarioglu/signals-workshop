@@ -20,6 +20,6 @@ SpecsFile {
     specsFile.write(all.asJSON);
     specsFile.close;
 
-    "Specs published".postln;
+    "Specs published.".postln;
   }
 }

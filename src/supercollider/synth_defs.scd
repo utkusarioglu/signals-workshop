@@ -87,7 +87,7 @@ var synthDefs = {
     Out.ar(out, outSig);
   }).add;
 
-  "Synthdefs registered".postln;
+  "Synthdefs registered.".postln;
 };
 
 synthDefs;
