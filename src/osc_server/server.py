@@ -25,11 +25,8 @@ osc_client = createUdpClient(scd_specs)
 
 @app.route("/")
 def root():
-    return render_template(
-        "index.html",
-        synth_specs=dumps(scd_specs["synth"]),
-        reverb_specs=dumps(scd_specs["reverb"]),
-    )
+    controls = scd_specs["controls"]
+    return render_template("index.html", controls=dumps(controls))
 
 
 def print_osc_update(path: str, values: list[float]) -> None:

@@ -1,39 +1,51 @@
 {
   "synth":[
     {
-      "name":"Pulse Vol",
+      "name":"Vol",
+      "group": "Pulse",
       "default":0.8
     },
     {
-      "name":"Pulse Spread",
+      "name":"Spread",
+      "group": "Pulse",
       "default":0
     },
     {
-      "name":"Saw Vol",
+      "name":"Vol",
+      "group": "Saw",
       "default":0
     },
     {
-      "name":"Saw Spread",
+      "name":"Spread",
+      "group": "Saw",
       "default":0
     },
     {
       "name":"Atk",
+      "group": "Env",
       "default":0.01
     },
     {
       "name":"Dec",
+      "group": "Env",
       "default":1
     },
     {
       "name":"Slev",
+      "group": "Env",
       "default":0.1
     },
     {
       "name":"Rel",
+      "group": "Env",
       "default":0.1
     }
   ],
   "reverb":[
+    {
+      "name":"Amp",
+      "default":0.5
+    },
     {
       "name":"Mix",
       "default":0.3
@@ -45,10 +57,6 @@
     {
       "name":"Damp",
       "default":0.6
-    },
-    {
-      "name":"Amp",
-      "default":0.5
     }
   ]
 }

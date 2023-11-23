@@ -304,21 +304,14 @@
         return ranges;
       }
 
-      // const rangesCC = rangeFactory("cc", 8);
-      // const rangeGroupCC = rangeGroupFactory("Control Change", rangesCC);
-      // rangeGroupContainer.appendChild(rangeGroupCC.node);
+      const CONTROLS = JSON.parse('{{ controls | safe }}');
 
-      const SYNTH_SPECS = JSON.parse('{{ synth_specs | safe }}');
-      const REVERB_SPECS = JSON.parse('{{reverb_specs | safe }}');
-
-      const rangesSynth = rangeFactory("/synth", SYNTH_SPECS);
-      const rangeGroupSynth = rangeGroupFactory("Synth", rangesSynth);
-      rangeGroupContainer.appendChild(rangeGroupSynth.node);
-
-      const rangesReverb = rangeFactory("/reverb", REVERB_SPECS);
-      const rangeGroupReverb = rangeGroupFactory("Reverb", rangesReverb);
-      rangeGroupContainer.appendChild(rangeGroupReverb.node);
-
+      Object.entries(CONTROLS).forEach(([name, specs]) => {
+        const rangesSynth = rangeFactory(`/${name}`, specs);
+        const title = name[0].toUpperCase() + name.slice(1).toLocaleLowerCase();
+        const rangeGroupSynth = rangeGroupFactory(title, rangesSynth);
+        rangeGroupContainer.appendChild(rangeGroupSynth.node);
+      });
     </script>
   </body>
 

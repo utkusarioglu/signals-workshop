@@ -7,7 +7,7 @@ s.doWhenBooted({
 
   s.freeAll;
 
-  SpecsFile.includeDict(defaults);
+  SpecsFile.includeKv(\controls, defaults);
   SpecsFile.includeKv(\langPort, NetAddr.langPort);
 
   loader.load("synth_defs.scd").();
@@ -15,4 +15,5 @@ s.doWhenBooted({
   loader.load("routine_defs.scd").(busses);
 
   SpecsFile.publish;
+  s.scope;
 });
