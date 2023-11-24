@@ -3,7 +3,6 @@ var controldefs = { | busses |
     OSCdef(key, {
       arg msg;
 
-      // msg.postln;
       busses[key].setAt(msg[1], msg[2]);
     }, "/" ++ key);
   });

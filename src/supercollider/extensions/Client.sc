@@ -1,5 +1,8 @@
 Client {
-  *setup { | host, port |
+  *setup { | 
+    host = "localhost", 
+    port = 57110
+    |
     var options, server;
 
     options = ServerOptions.new;

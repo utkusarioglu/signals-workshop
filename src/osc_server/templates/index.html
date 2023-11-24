@@ -90,13 +90,20 @@
       }
 
       .range-label-decoration {
-        background-color: #333;
         width: 100%;
         text-align: center;
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
         margin-top: 0.5rem;
         border-radius: 0.5rem;
+      }
+
+      .range-label-decoration.range-key {
+        background-color: #333;
+      }
+
+      .range-label-decoration.range-class {
+        background-color: #111;
       }
 
       .banner-container {
@@ -113,10 +120,6 @@
       .banner-content-wrapper .banner-content {
         padding: 1rem;
       }
-
-      /* .banner-content-wrapper.disconnected {
-        background-color: #500;
-      } */
 
     </style>
 
@@ -143,8 +146,11 @@
           <button class="range-input range-input-button button-0">0</button>
           <input class="range-input slider" type="range" min="0" max="100" step="1" orient="vertical" value="0" />
         </div>
-        <div class="range-label-decoration">
-          <label class="range-label"></label>
+        <div class="range-label-decoration range-key">
+          <label class="range-label range-key"></label>
+        </div>
+        <div class="range-label-decoration range-class hidden">
+          <label class="range-label range-class"></label>
         </div>
       </div>
 
@@ -228,33 +234,23 @@
         }
       }
 
-      const socket = io();
-      const banner = new Banner();
-
-      socket.on('connect', function () {
-        banner.set("success", "Connected", 1000);
-      });
-
-      socket.on("disconnect", () => {
-        banner.set("error", "Disconnected");
-      });
-
-      function sendMessage(path, channel, rawValue) {
+      function sendMessage(key, channel, rawValue) {
         const value = Value.normalize(rawValue);
-        socket.emit("json", { path, channel, value });
+        socket.emit("json", { key, channel, value });
       }
 
       const getInputId = (title, i) => {
         return `range-${title}-${i}-input`;
       };
 
-      const rangeTemplate = document.querySelector(".range-template .range");
-      const rangeGroupTemplate = document.querySelector(".range-group");
+      const rangeTemplate = document.querySelector(".range-template > .range");
+      const rangeGroupTemplate = document.querySelector(".range-template > .range-group");
       const rangeGroupContainer = document.querySelector(".range-group-container");
 
       function rangeGroupFactory(title, ranges) {
         const rangeGroup = rangeGroupTemplate.cloneNode(true);
-        rangeGroup.querySelector(".title").innerText = title;
+        const titleDiv = rangeGroup.querySelector(".title");
+        titleDiv.innerText = title;
         const rangeContainer = rangeGroup.querySelector(".range-container");
         ranges.forEach((range) => {
           rangeContainer.appendChild(range.node);
@@ -265,19 +261,27 @@
         };
       }
 
-      function rangeFactory(path, specs) {
-        const ranges = specs.map(({ name, default: defaultValue }, channel) => {
+      function rangeFactory(key, specs) {
+        const ranges = specs.map(({ name, default: defaultValue, group }, channel) => {
           const node = rangeTemplate.cloneNode(true);
-          const inputId = getInputId(path, channel);
+          const inputId = getInputId(key, channel);
           const rangeInputSliderDiv = node.querySelector(".range-input.slider");
-          const rangeLabelDiv = node.querySelector(".range-label");
-          rangeInputSliderDiv.id = inputId;
+          const rangeLabelKeyDiv = node.querySelector(".range-label.range-key");
+          const rangeLabelGroupDiv = node.querySelector(".range-label.range-class");
+          const rangeLabelDecoratorGroupDiv = node.querySelector(".range-label-decoration.range-class");
+
           rangeInputSliderDiv.defaultValue = Value.denormalize(defaultValue);
-          rangeLabelDiv.htmlFor = inputId;
-          rangeLabelDiv.innerHTML = name.split(" ").join("<br>");
+          rangeInputSliderDiv.id = inputId;
+          rangeLabelKeyDiv.htmlFor = inputId;
+          rangeLabelKeyDiv.innerText = name;
+          if (group)
+          {
+            rangeLabelGroupDiv.innerText = group;
+            rangeLabelDecoratorGroupDiv.classList.remove("hidden");
+          }
 
           const sliderListener = rangeInputSliderDiv.addEventListener("input", (e) => {
-            sendMessage(path, channel, e.target.value);
+            sendMessage(key, channel, e.target.value);
           });
 
           const buttons = Array(5).fill(0).map((_, i) => i * 25).map((value) => ({
@@ -288,7 +292,7 @@
           buttons.map(({ value, buttonNode }) => {
             return buttonNode.addEventListener("click", () => {
               rangeInputSliderDiv.value = value;
-              sendMessage(path, channel, value);
+              sendMessage(key, channel, value);
             });
           });
 
@@ -304,14 +308,35 @@
         return ranges;
       }
 
-      const CONTROLS = JSON.parse('{{ controls | safe }}');
 
-      Object.entries(CONTROLS).forEach(([name, specs]) => {
-        const rangesSynth = rangeFactory(`/${name}`, specs);
-        const title = name[0].toUpperCase() + name.slice(1).toLocaleLowerCase();
-        const rangeGroupSynth = rangeGroupFactory(title, rangesSynth);
-        rangeGroupContainer.appendChild(rangeGroupSynth.node);
+      const DEFAULT_CONTROLS = JSON.parse('{{ controls | safe }}');
+
+      function createRangeGroups() {
+        return Object.entries(DEFAULT_CONTROLS).map(([key, specs]) => {
+          const rangesSynth = rangeFactory(key, specs);
+          const title = key[0].toUpperCase() + key.slice(1).toLocaleLowerCase();
+          const rangeGroupSynth = rangeGroupFactory(title, rangesSynth);
+          return rangeGroupSynth;
+        });
+      }
+
+      const socket = io();
+      const banner = new Banner();
+
+      socket.on('connect', function () {
+        banner.set("success", "Connected", 1000);
+
+        const rangeGroups = createRangeGroups();
+        rangeGroupContainer.innerHTML = "";
+        rangeGroups.forEach(({ node }) => {
+          rangeGroupContainer.appendChild(node);
+        });
       });
+
+      socket.on("disconnect", () => {
+        banner.set("error", "Disconnected");
+      });
+
     </script>
   </body>
 

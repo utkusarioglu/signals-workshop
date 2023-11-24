@@ -15,5 +15,4 @@ s.doWhenBooted({
   loader.load("routine_defs.scd").(busses);
 
   SpecsFile.publish;
-  s.scope;
 });

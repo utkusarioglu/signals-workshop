@@ -1,3 +1,6 @@
+. scripts\utils\SuperCollider.ps1
+
+
 function Watch-Scd {
   Param (
     [Parameter(Mandatory = $True)]
@@ -9,12 +12,13 @@ function Watch-Scd {
     "src\supercollider"
   ) -Join "\"
 
+  $SclangConfigPath = Set-MergedSclangConfigFile
   $FileAbspath = @( $WorkingDirectory, $Filename ) -Join "\"
 
   $FileChangeArgs = @{
     FileAbsPath = $FileAbspath
     WorkingDirectory = $WorkingDirectory
-    CallbackString = "sclang.exe -l sclang_conf.yaml ${FileAbspath}"
+    CallbackString = "sclang.exe -l ${SclangConfigPath} ${FileAbspath}"
   }
 
   Watch-File @FileChangeArgs

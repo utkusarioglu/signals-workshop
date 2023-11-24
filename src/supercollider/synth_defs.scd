@@ -71,10 +71,10 @@ var synthDefs = {
     var inSig, outSig, krs, mix, room, damp, amp;
 
     krs = In.kr(reverbCf, 8);
-    mix = krs[0];
-    room = krs[1];
-    damp = krs[2];
-    amp = krs[3];
+    amp = krs[0];
+    mix = krs[1];
+    room = krs[2];
+    damp = krs[3];
 
     inSig = In.ar(in, 2);
 

@@ -3,30 +3,25 @@ from flask_socketio import SocketIO
 from pythonosc import udp_client
 from json import loads, dumps
 from sys import stdout
+from utils.supercollider import SuperCollider
 
+supercollider = SuperCollider("../../.scd_specs", "192.168.1.151")
 
-def getSpecs():
-    with open("../../.scd_specs", "r") as specs:
-        scd_config = loads(specs.read())
-        return scd_config
+scd_specs = supercollider.getScdSpecs()
+control_defaults = scd_specs["controls"]
+user_settings = control_defaults.copy()
 
-
-def createUdpClient(scd_specs):
-    lang_port = scd_specs["langPort"]
-    return udp_client.SimpleUDPClient("192.168.1.151", lang_port)
-
-
-scd_specs = getSpecs()
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "a"
 socketio = SocketIO(app)
-osc_client = createUdpClient(scd_specs)
+osc_client = supercollider.createUdpClient()
 
 
 @app.route("/")
 def root():
-    controls = scd_specs["controls"]
-    return render_template("index.html", controls=dumps(controls))
+    return render_template(
+        "index.html", controls=dumps({**control_defaults, **user_settings})
+    )
 
 
 def print_osc_update(path: str, values: list[float]) -> None:
@@ -35,8 +30,12 @@ def print_osc_update(path: str, values: list[float]) -> None:
 
 
 @socketio.on("json")
-def ws_supercollider(transmission):
-    path = transmission["path"]
-    values = [transmission["channel"], transmission["value"]]
-    osc_client.send_message(path, values)
-    print_osc_update(path, values)
+def ws_supercollider(transmission: dict):
+    key, channel, value = transmission.values()
+
+    user_settings[key][channel]["default"] = value
+    path = f"/{key}"
+
+    message = [channel, value]
+    osc_client.send_message(path, message)
+    print_osc_update(path, message)

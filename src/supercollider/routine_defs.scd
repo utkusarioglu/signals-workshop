@@ -1,12 +1,18 @@
-var publish = { | tempo, speed, root, repeat, sequenceSize |
+var logSpec = { | name, value |
+  [
+    "  ", 
+    (name ++ ":").padRight(8, " "), 
+    value
+    ].reduce('++').postln;
+};
+
+var logSpecs = { | tempo, speed, root, repeat, sequenceSize |
     "Starting melody:".postln;
-    (
-      "  Tempo:" + tempo + "\n"
-      "  Speed:" + speed + "\n"
-      "  Root:" + root + "\n"
-      "  Repeats:" + repeat + "\n"
-      "  Length:" + sequenceSize
-    ).postln;
+    logSpec.("Tempo", tempo);
+    logSpec.("Speed", speed);
+    logSpec.("Root", root);
+    logSpec.("Repeat", repeat);
+    logSpec.("Size", sequenceSize);
 };
 
 var routineDefs = { | busses | 
@@ -23,6 +29,7 @@ var routineDefs = { | busses |
     arg msg;
     var sequence, speed, tempo, root, repeat;
 
+    msg.postln;
     sequence = msg;
     sequence.removeAt(0);
     tempo = sequence.removeAt(0);
@@ -39,7 +46,7 @@ var routineDefs = { | busses |
       "Skipping empty sequence.".postln;
     }, 
     {
-      publish.(tempo, speed, root, repeat, sequence.size);
+      logSpecs.(tempo, speed, root, repeat, sequence.size);
       routine = Routine({
         repeat.do({
           arg i;
