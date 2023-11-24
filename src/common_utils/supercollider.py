@@ -3,22 +3,23 @@ from json import loads
 from typing import Union
 
 PrintSpecs = dict[str, Union[int, float]]
+FloatInt = Union[float, int]
 
 
 class SuperCollider:
     def __init__(self, specs_path: str, host: str) -> None:
-        self.scd_specs = self._loadScdSpecs(specs_path)
+        self.scd_specs = self._load_scd_specs(specs_path)
         self.host = host
 
     def send_melody(
         self,
-        tempo: float,
-        speed: float,
-        root: float,
+        tempo: FloatInt,
+        speed: FloatInt,
+        root: int,
         repeat: int,
         sequence: list[int],
     ):
-        osc_client = self.createUdpClient()
+        osc_client = self.create_udp_client()
         print_specs = {
             "Tempo": tempo,
             "Speed": speed,
@@ -27,18 +28,17 @@ class SuperCollider:
             "Size": len(sequence),
         }
         message = [tempo, speed, root, repeat, *sequence]
-        print(message)
         osc_client.send_message("/melody", message)
         self._print(print_specs)
 
-    def createUdpClient(self):
+    def create_udp_client(self):
         lang_port = self.scd_specs["langPort"]
         return udp_client.SimpleUDPClient(self.host, lang_port)
 
-    def getScdSpecs(self):
+    def get_scd_specs(self):
         return self.scd_specs
 
-    def _loadScdSpecs(self, specs_path: str):
+    def _load_scd_specs(self, specs_path: str):
         with open(specs_path, "r") as specs:
             scd_config = loads(specs.read())
             return scd_config

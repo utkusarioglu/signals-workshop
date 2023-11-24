@@ -1,13 +1,11 @@
+var loader = Loader("src/supercollider");
+var logKv = loader.load("log/kv.scd");
+
 var publishAssignments = { | controlBusses |
   "Control bus assignments:".postln;
 
   controlBusses.keys().do({ | key |
-    [
-      "  ", 
-      key, 
-      ": ", 
-      controlBusses[key].index
-    ].reduce('++').postln;
+    logKv.(key, controlBusses[key].index, 2, 8);
   });
 };
 

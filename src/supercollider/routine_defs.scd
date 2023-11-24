@@ -1,18 +1,14 @@
-var logSpec = { | name, value |
-  [
-    "  ", 
-    (name ++ ":").padRight(8, " "), 
-    value
-    ].reduce('++').postln;
-};
+var loader = Loader("src/supercollider");
+var logKv = loader.load("log/kv.scd");
 
 var logSpecs = { | tempo, speed, root, repeat, sequenceSize |
+    var common = [2, 8];
     "Starting melody:".postln;
-    logSpec.("Tempo", tempo);
-    logSpec.("Speed", speed);
-    logSpec.("Root", root);
-    logSpec.("Repeat", repeat);
-    logSpec.("Size", sequenceSize);
+    logKv.("Tempo", tempo, *common);
+    logKv.("Speed", speed, *common);
+    logKv.("Root", root, *common);
+    logKv.("Repeat", repeat, *common);
+    logKv.("Size", sequenceSize, *common);
 };
 
 var routineDefs = { | busses | 
@@ -29,7 +25,6 @@ var routineDefs = { | busses |
     arg msg;
     var sequence, speed, tempo, root, repeat;
 
-    msg.postln;
     sequence = msg;
     sequence.removeAt(0);
     tempo = sequence.removeAt(0);
@@ -51,7 +46,8 @@ var routineDefs = { | busses |
         repeat.do({
           arg i;
 
-          ("Repeat:" + i).postln;
+          logKv.("Repeat", i, 4, 8);
+
           sequence.do({
             arg value;
 

@@ -10,12 +10,11 @@ Loader {
   }
 
   load { | fileRelpath |
-    var separator = "/";
     var abspath = [
       File.getcwd, 
-      separator, 
+      Platform.pathSeparator,
       this.workingRelPath, 
-      separator, 
+      Platform.pathSeparator,
       fileRelpath
     ].reduce('++');
 

@@ -16,7 +16,12 @@ SpecsFile {
   }
 
   *publish {
-    var specsFile = File(File.getcwd ++ "/.scd_specs", "w+");
+    var specsFileAbsPath = [
+      File.getcwd,
+      Platform.pathSeparator,
+      ".scd_specs"
+    ].reduce('++');
+    var specsFile = File(specsFileAbsPath, "w+");
     specsFile.write(all.asJSON);
     specsFile.close;
 

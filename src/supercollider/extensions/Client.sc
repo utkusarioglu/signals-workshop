@@ -1,6 +1,6 @@
 Client {
-  *setup { | 
-    host = "localhost", 
+  *setup { |
+    host = "localhost",
     port = 57110
     |
     var options, server;
@@ -12,5 +12,7 @@ Client {
     Server.default = server;
 
     ["Client connected to '", host, ":", port, "'."].reduce('++').postln;
+
+    ^server;
   }
 }

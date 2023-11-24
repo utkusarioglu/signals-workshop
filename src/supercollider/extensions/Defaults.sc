@@ -10,7 +10,11 @@ Defaults {
   }
 
   load {
-    var abspath = [File.getcwd, "/", this.jsonRelPath].reduce('++');
+    var abspath = [
+      File.getcwd, 
+      Platform.pathSeparator, 
+      this.jsonRelPath
+    ].reduce('++');
     var json = File.readAllString(abspath);
     ^JSONlib.convertToSC(json);
   }
