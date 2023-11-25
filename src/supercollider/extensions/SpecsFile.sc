@@ -19,7 +19,7 @@ SpecsFile {
     var specsFileAbsPath = [
       File.getcwd,
       Platform.pathSeparator,
-      ".scd_specs"
+      ".scd_specs.json"
     ].reduce('++');
     var specsFile = File(specsFileAbsPath, "w+");
     specsFile.write(all.asJSON);

@@ -31,8 +31,11 @@ class SuperCollider:
         osc_client.send_message("/melody", message)
         self._print(print_specs)
 
+    def get_lang_port(self):
+        return self.scd_specs["langPort"]
+
     def create_udp_client(self):
-        lang_port = self.scd_specs["langPort"]
+        lang_port = self.get_lang_port()
         return udp_client.SimpleUDPClient(self.host, lang_port)
 
     def get_scd_specs(self):

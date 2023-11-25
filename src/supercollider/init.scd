@@ -12,6 +12,7 @@ Client.setup("localhost", 57110).doWhenBooted({
   
   loader.load("synth_defs/saw3.scd");
   loader.load("synth_defs/free_verb_2_2.scd");
+  loader.load("synth_defs/scamp1.scd");
 
   loader.load("routine_defs.scd").(busses);
 

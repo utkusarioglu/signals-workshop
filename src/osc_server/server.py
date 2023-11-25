@@ -4,7 +4,7 @@ from json import dumps
 from sys import stdout
 from common_utils.supercollider import SuperCollider
 
-supercollider = SuperCollider("../../.scd_specs", "192.168.1.151")
+supercollider = SuperCollider("../../.scd_specs.json", "192.168.1.151")
 
 scd_specs = supercollider.get_scd_specs()
 control_defaults = scd_specs["controls"]
