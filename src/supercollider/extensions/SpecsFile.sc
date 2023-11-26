@@ -22,6 +22,9 @@ SpecsFile {
       ".scd_specs.json"
     ].reduce('++');
     var specsFile = File(specsFileAbsPath, "w+");
+    
+    this.includeKv("created", Date.localtime.asString);
+
     specsFile.write(all.asJSON);
     specsFile.close;
 

@@ -11,12 +11,12 @@ var logSpecs = { | tempo, speed, root, repeat, sequenceSize |
     logKv.("Size", sequenceSize, *common);
 };
 
-var routineDefs = { | busses | 
+var routineDefs = { | config | 
   var routine;
 
   (
     instrument: \FreeVerb2x2,
-    reverbCf: busses[\reverb],
+    reverbCf: config[\busIndexes]["reverb"][0],
     out: 0,
     in: 3,
   ).play;
@@ -55,7 +55,7 @@ var routineDefs = { | busses |
               \instrument: \saw3,
               \midinote: root + value,
               \out: 3,
-              \synthCf: busses[\synth],
+              \synthCf: config[\busIndexes]["synth"][0],
               \spreadThreshold: 100,
             ).play;
 

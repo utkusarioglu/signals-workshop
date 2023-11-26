@@ -7,8 +7,8 @@ FloatInt = Union[float, int]
 
 
 class SuperCollider:
-    def __init__(self, specs_path: str, host: str) -> None:
-        self.scd_specs = self._load_scd_specs(specs_path)
+    def __init__(self, specs_relpath: str, host: str) -> None:
+        self.scd_specs = self._load_scd_specs(specs_relpath)
         self.host = host
 
     def send_melody(
@@ -41,8 +41,8 @@ class SuperCollider:
     def get_scd_specs(self):
         return self.scd_specs
 
-    def _load_scd_specs(self, specs_path: str):
-        with open(specs_path, "r") as specs:
+    def _load_scd_specs(self, specs_relpath: str):
+        with open(specs_relpath, "r") as specs:
             scd_config = loads(specs.read())
             return scd_config
 

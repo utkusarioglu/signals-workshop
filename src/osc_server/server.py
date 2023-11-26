@@ -4,11 +4,11 @@ from json import dumps
 from sys import stdout
 from common_utils.supercollider import SuperCollider
 
-supercollider = SuperCollider("../../.scd_specs.json", "192.168.1.151")
+supercollider = SuperCollider("../../.scd_specs.json", "supercollider")
 
 scd_specs = supercollider.get_scd_specs()
-control_defaults = scd_specs["controls"]
-user_settings = control_defaults.copy()
+# control_defaults = scd_specs["controls"]
+# user_settings = control_defaults.copy()
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "a"
@@ -18,9 +18,7 @@ osc_client = supercollider.create_udp_client()
 
 @app.route("/")
 def root():
-    return render_template(
-        "index.html", controls=dumps({**control_defaults, **user_settings})
-    )
+    return render_template("index.html", controls=dumps(scd_specs))
 
 
 def print_osc_update(path: str, values: list[float]) -> None:
@@ -32,7 +30,7 @@ def print_osc_update(path: str, values: list[float]) -> None:
 def ws_supercollider(transmission: dict):
     key, channel, value = transmission.values()
 
-    user_settings[key][channel]["default"] = value
+    # user_settings[key][channel]["default"] = value
     path = f"/{key}"
 
     message = [channel, value]

@@ -261,10 +261,10 @@
         };
       }
 
-      function rangeFactory(key, specs) {
+      function rangeFactory(symbol, specs) {
         const ranges = specs.map(({ name, default: defaultValue, group }, channel) => {
           const node = rangeTemplate.cloneNode(true);
-          const inputId = getInputId(key, channel);
+          const inputId = getInputId(symbol, channel);
           const rangeInputSliderDiv = node.querySelector(".range-input.slider");
           const rangeLabelKeyDiv = node.querySelector(".range-label.range-key");
           const rangeLabelGroupDiv = node.querySelector(".range-label.range-class");
@@ -281,7 +281,7 @@
           }
 
           const sliderListener = rangeInputSliderDiv.addEventListener("input", (e) => {
-            sendMessage(key, channel, e.target.value);
+            sendMessage(symbol, channel, e.target.value);
           });
 
           const buttons = Array(5).fill(0).map((_, i) => i * 25).map((value) => ({
@@ -292,7 +292,7 @@
           buttons.map(({ value, buttonNode }) => {
             return buttonNode.addEventListener("click", () => {
               rangeInputSliderDiv.value = value;
-              sendMessage(key, channel, value);
+              sendMessage(symbol, channel, value);
             });
           });
 
@@ -309,12 +309,13 @@
       }
 
 
-      const DEFAULT_CONTROLS = JSON.parse('{{ controls | safe }}');
+      const SCD_SPECS = JSON.parse('{{ controls | safe }}');
+
+      console.log({ SCD_SPECS });
 
       function createRangeGroups() {
-        return Object.entries(DEFAULT_CONTROLS).map(([key, specs]) => {
-          const rangesSynth = rangeFactory(key, specs);
-          const title = key[0].toUpperCase() + key.slice(1).toLocaleLowerCase();
+        return SCD_SPECS.config.raw.controls.map(({ symbol, title, specs }) => {
+          const rangesSynth = rangeFactory(symbol, specs);
           const rangeGroupSynth = rangeGroupFactory(title, rangesSynth);
           return rangeGroupSynth;
         });

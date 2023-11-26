@@ -1,9 +1,22 @@
-var controldefs = { | busses |
-  busses.keys().do({ | key |
+var controldefs = { | busses, config |
+  config[\busOrder].do({ | key |
+    MidiBridge.createControl(key, "Control");
+
     OSCdef(key, {
       arg msg;
 
-      busses[key].setAt(msg[1], msg[2]);
+      msg.postln;
+      busses.setAt(
+        config[\busIndexes][key][0] + msg[1],
+        msg[2]
+      );
+
+      MidiBridge.updateControl(
+        key, 
+        config[\channels][key], 
+        msg[1], 
+        msg[2] * 127
+      );
     }, "/" ++ key);
   });
 };

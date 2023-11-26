@@ -2,8 +2,8 @@
   "controls": [
     {
       "symbol": "synth",
-      "title": "Synth",
-      "specs": [
+      "name": "Synth",
+      "ranges": [
         {
           "name":"Vol",
           "group": "Pulse",
@@ -45,54 +45,46 @@
           "default":0.1
         }
       ]
+    }
+  ],
+  "reverb":[
+    {
+      "name":"Amp",
+      "default":0.5
     },
     {
-      "symbol": "reverb",
-      "title": "Reverb",
-      "specs":[
-        {
-          "name":"Amp",
-          "default":0.5
-        },
-        {
-          "name":"Mix",
-          "default":0.3
-        },
-        {
-          "name":"Room",
-          "default":0.5
-        },
-        {
-          "name":"Damp",
-          "default":0.6
-        }
-      ]
+      "name":"Mix",
+      "default":0.3
     },
     {
-      "symbol": "cc",
-      "title": "ControlChange",
-      "specs":[
-        {
-          "name":"One",
-          "group": "One",
-          "default":0.5
-        },
-        {
-          "name":"Two",
-          "group": "One",
-          "default":0.3
-        },
-        {
-          "name":"Three",
-          "group": "Two",
-          "default":0.5
-        },
-        {
-          "name":"Four",
-          "group": "Two",
-          "default":0.6
-        }
-      ]
+      "name":"Room",
+      "default":0.5
+    },
+    {
+      "name":"Damp",
+      "default":0.6
+    }
+  ],
+  "cc":[
+    {
+      "name":"One",
+      "group": "One",
+      "default":0.5
+    },
+    {
+      "name":"Two",
+      "group": "One",
+      "default":0.3
+    },
+    {
+      "name":"Three",
+      "group": "Two",
+      "default":0.5
+    },
+    {
+      "name":"Four",
+      "group": "Two",
+      "default":0.6
     }
   ]
 }
