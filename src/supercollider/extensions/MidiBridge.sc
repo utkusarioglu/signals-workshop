@@ -2,11 +2,13 @@ MidiBridge {
   classvar prefix;
   classvar instruments;
   classvar controls;
+  classvar controllers;
   
   *initClass {
     prefix = "loopMIDI ";
     instruments = Dictionary();
     controls = Dictionary();
+    controllers = Dictionary();
 
     MIDIClient.init;
     MIDIClient.destinations;
@@ -35,18 +37,23 @@ MidiBridge {
     ^instruments[key];
   }
 
-  *createControl { | key, bridge |
+  *createController { | key, bridge |
     var portName = prefix ++ bridge;
-    var controller = MIDIOut.newByName(portName, portName);
-
-    controls[key] = controller;
+    controllers[key] = MIDIOut.newByName(portName, portName);
   }
 
-  *updateControl { | key, chan, ctlNum, val |
-    var controller = controls[key];
+  *addControl { | controllerId, busId, midiChannel |
+    controls[busId] = (
+      controllerId: controllerId,
+      midiChannel: midiChannel
+    );
+  }
 
-    controller.control(
-      chan: chan,
+  *updateControl { | key, ctlNum, val |
+    var control = controls[key];
+
+    controllers[control[\controllerId]].control(
+      chan: control[\midiChannel],
       ctlNum: ctlNum,
       val: val
     );

@@ -23,6 +23,7 @@ Defaults {
     var parsed = Dictionary();
     var busses = Dictionary();
     var channels = Dictionary();
+    var titles = Dictionary();
     var busOrder = Array(config[\controls].size);
     var start = 0;
     var end = -1;
@@ -36,6 +37,7 @@ Defaults {
       busses[key] = [start, end];
       channels[key] = index;
       busOrder.add(key);
+      titles[key] = parts[\title]
     });
 
     parsed[\busses] = busses;
@@ -43,6 +45,7 @@ Defaults {
     parsed[\channels] = channels;
     parsed[\defaults] = this.produceDefaultsArray(parsed);
     parsed[\busOrder] = busOrder;
+    parsed[\titles] = titles;
 
     ^parsed;
   }

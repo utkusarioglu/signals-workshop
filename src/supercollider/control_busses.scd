@@ -2,7 +2,7 @@ var loader = Loader("src/supercollider");
 var logKv = loader.load("log/kv.scd");
 
 var publishAssignments = { | config |
-  "Control bus assignments:".postln;
+  "Control assignments:".postln;
 
   config[\busOrder].do({ | key |
     var range = config[\busIndexes][key].collect({ | val |

@@ -1,6 +1,8 @@
 var controldefs = { | busses, config |
+  MidiBridge.createController(\controls, "Controls");
+
   config[\busOrder].do({ | key |
-    MidiBridge.createControl(key, "Control");
+    MidiBridge.addControl(\controls, key, config[\channels][key]);
 
     OSCdef(key, {
       arg msg;
@@ -11,9 +13,8 @@ var controldefs = { | busses, config |
       );
 
       MidiBridge.updateControl(
-        key, 
-        config[\channels][key], 
-        msg[1], 
+        key,
+        msg[1],
         msg[2] * 127
       );
     }, "/" ++ key);
