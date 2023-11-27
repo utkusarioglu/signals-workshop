@@ -7,6 +7,8 @@ var controldefs = { | busses, config |
     OSCdef(key, {
       arg msg;
 
+      // msg.postln;
+
       busses.setAt(
         config[\busIndexes][key][0] + msg[1],
         msg[2]

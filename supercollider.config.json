@@ -93,6 +93,28 @@
           "default":0.6
         }
       ]
-    }
+    },
+    {
+      "symbol": "scamp1",
+      "title": "Scamp1",
+      "specs": [
+        {
+          "name": "Amp",
+          "default": 1
+        },
+        {
+          "name": "Crack",
+          "default": 0
+        },
+        {
+          "name": "Spread",
+          "default": 0
+        },
+        {
+          "name": "pan",
+          "default": 0.5
+        }
+      ]
+    },
   ]
 }
