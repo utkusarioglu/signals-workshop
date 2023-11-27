@@ -8,7 +8,7 @@ var publishAssignments = { | config |
     var range = config[\busIndexes][key].collect({ | val |
       val.asString.padLeft(4, " ");
     }).reduce('+');
-    range = range + config[\channels][key];
+    range = range + config[\channels][key].asString;
     logKv.(key, range, 2, 8);
   });
 };
