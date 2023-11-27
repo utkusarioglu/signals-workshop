@@ -10,7 +10,8 @@ Client.setup("localhost", 57110).doWhenBooted({
 
   loader.load("midi/instruments.scd");
 
-  loader.load("control_defs.scd").(busses, config);
+  loader.load("osc/control.scd").(busses, config);
+  loader.load("osc/instruments.scd").("piano");
   
   loader.load("synth_defs/saw3.scd");
   loader.load("synth_defs/free_verb_2_2.scd");
