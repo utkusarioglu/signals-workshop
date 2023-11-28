@@ -1,31 +1,30 @@
-var loader = Loader("src/supercollider");
-var logKv = loader.load("log/kv.scd");
+var logKv = ScdLoader.load("log/kv.scd");
 
-var publishAssignments = { | config |
-  "Control assignments:".postln;
+// var publishAssignments = { | config |
+//   "Control assignments:".postln;
 
-  config[\busOrder].do({ | key |
-    var range = config[\busIndexes][key].collect({ | val |
-      val.asString.padLeft(4, " ");
-    }).reduce('+');
-    range = range + config[\channels][key].asString;
-    logKv.(key, range, 2, 8);
-  });
-};
+//   config[\busOrder].do({ | key |
+//     var range = config[\busIndexes][key].collect({ | val |
+//       val.asString.padLeft(4, " ");
+//     }).reduce('+');
+//     range = range + config[\channels][key].asString;
+//     logKv.(key, range, 2, 8);
+//   });
+// };
 
 var busses = { | server, config |
-  var busIndexes = Dictionary();
-  var busses = Bus.control(server, config[\defaults].size);
-  busses.setn(config[\defaults]);
+  var busses = Bus.control(server, Config.defaults.size);
+  busses.setn(Config.defaults);
   
-  config[\busOrder].do({ | key |
-    busIndexes[key] = config[\busses][key].collect({ | ptr |
-      ptr + busses.index;
-    })
-  });
+  // config[\busOrder].do({ | key |
+  //   busIndexes[key] = config[\busses][key].collect({ | ptr |
+  //     ptr + busses.index;
+  //   })
+  // });
 
-  config[\busIndexes] = busIndexes;
-  publishAssignments.(config);
+  // publishAssignments.(config);
+  
+  Config.setBusIndexes(busses.index);
 
   busses;
 };

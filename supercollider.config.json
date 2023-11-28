@@ -1,4 +1,8 @@
 {
+  "connection": {
+    "host": "localhost",
+    "port": 57110
+  },
   "controls": [
     {
       "symbol": "synth",
@@ -115,6 +119,6 @@
           "default": 0.5
         }
       ]
-    },
+    }
   ]
 }

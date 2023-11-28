@@ -1,4 +1,4 @@
-var define = { | cf, out |
+var define = { | out |
   ScampUtils.instrumentFromSynthDef(
     SynthDef(\scamp1, { | 
         freq=440,
@@ -10,9 +10,10 @@ var define = { | cf, out |
         spread, pan, amp;
       var synth, sig, env, pan2;
 
-      ("CF" + cf).postln;
-
-      krs = In.kr(cf, 8);
+      krs = In.kr(
+        Config.getBusIndexStart("scamp1"), 
+        Config.getBusLength("scamp1")
+      );
       amp = krs[0].linlin(0, 1, 0, 1);
       crackliness1 = krs[1].linlin(0, 1, 30, 100);
       crackliness2 = krs[1].linlin(0, 1, 0, 0.2);

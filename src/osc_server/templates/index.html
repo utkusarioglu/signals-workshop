@@ -314,7 +314,7 @@
       console.log({ SCD_SPECS });
 
       function createRangeGroups() {
-        return SCD_SPECS.config.raw.controls.map(({ symbol, title, specs }) => {
+        return SCD_SPECS.config.controls.map(({ symbol, title, specs }) => {
           const rangesSynth = rangeFactory(symbol, specs);
           const rangeGroupSynth = rangeGroupFactory(title, rangesSynth);
           return rangeGroupSynth;

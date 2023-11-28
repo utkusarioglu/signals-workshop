@@ -1,13 +1,16 @@
 SynthDef(\FreeVerb2x2, { 
   |
     out,
-    in,
-    reverbCf
+    in
+    // reverbCf
   |
   var inSig, outSig, krs, mix, room, damp, amp;
 
   inSig = In.ar(in, 2);
-  krs = In.kr(reverbCf, 4);
+  krs = In.kr(
+    Config.getBusIndexStart("reverb"), 
+    Config.getBusLength("reverb")
+  );
 
   amp = krs[0];
   mix = krs[1];

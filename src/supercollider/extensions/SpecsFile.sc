@@ -1,8 +1,10 @@
 SpecsFile {
   classvar all;
+  classvar specsFileBase;
   
   *initClass {
-    all = ();
+    all = Dictionary();
+    specsFileBase = ".scd_specs.json";
   }
   
   *includeKv { | key, value |
@@ -15,19 +17,39 @@ SpecsFile {
     all = all ++ dict;
   }
 
-  *publish {
-    var specsFileAbsPath = [
-      File.getcwd,
-      Platform.pathSeparator,
-      ".scd_specs.json"
-    ].reduce('++');
-    var specsFile = File(specsFileAbsPath, "w+");
-    
-    this.includeKv("created", Date.localtime.asString);
+  *write {
+    var specsFile = File(this.getSpecsFileAbsPath(), "w+");
+    this.includeKv(\timestamp, Date.localtime.asString);
 
     specsFile.write(all.asJSON);
     specsFile.close;
+  }
 
-    "Specs published.".postln;
+  *read {
+    ^JsonLoader(specsFileBase).load;
+  }
+
+  *getSpecsFileAbsPath {
+    var specsFileAbsPath = [
+      File.getcwd,
+      Platform.pathSeparator,
+      specsFileBase
+    ].reduce('++');
+    ^specsFileAbsPath;
+  }
+
+  *log {
+    ("Specs written to '" ++ specsFileBase ++ "'.").postln;
+    [
+      "Client connected to '", 
+      all[\config][\connection][\host], 
+      ":", 
+      all[\config][\connection][\port], 
+      "'."
+    ].reduce('++').postln;
+  }
+
+  *checkIfExists {
+    ^File.exists(this.getSpecsFileAbsPath());
   }
 }

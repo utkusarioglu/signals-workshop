@@ -1,25 +1,5 @@
-Defaults {
-  var <>jsonRelPath;
-
-  *new { | jsonRelPath |
-    ^super.newCopyArgs(jsonRelPath);
-  }
-
-  init { | jsonRelPath |
-    this.jsonRelPath = jsonRelPath;
-  }
-
-  load {
-    var abspath = [
-      File.getcwd, 
-      Platform.pathSeparator, 
-      this.jsonRelPath
-    ].reduce('++');
-    var json = File.readAllString(abspath);
-    ^JSONlib.convertToSC(json);
-  }
-
-  expand { | config |
+ConfigParser {
+  *parse { | config |
     var parsed = Dictionary();
     var busses = Dictionary();
     var channels = Dictionary();
@@ -28,7 +8,7 @@ Defaults {
     var start = 0;
     var end = -1;
 
-    parsed[\raw] = config;
+    parsed[\config] = config;
 
     config[\controls].do({ | parts, index |
       var key = parts[\symbol];
@@ -50,15 +30,10 @@ Defaults {
     ^parsed;
   }
 
-  parse {
-    var raw = this.load;
-    ^this.expand(raw);
-  }
-
-  produceDefaultsArray { | parsed |
+  *produceDefaultsArray { | parsed |
     var defaults = Array(parsed[\size]);
     var ptr = 0;
-    parsed[\raw][\controls].do({ | parts |
+    parsed[\config][\controls].do({ | parts |
       parts[\specs].do({ | spec |
         defaults.add(spec[\default]);
       });

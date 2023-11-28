@@ -1,5 +1,4 @@
-var loader = Loader("src/supercollider");
-var logKv = loader.load("log/kv.scd");
+var logKv = ScdLoader.load("log/kv.scd");
 
 var logSpecs = { | tempo, speed, root, repeat, sequenceSize |
     var common = [2, 8];
@@ -11,12 +10,11 @@ var logSpecs = { | tempo, speed, root, repeat, sequenceSize |
     logKv.("Size", sequenceSize, *common);
 };
 
-var routineDefs = { | config | 
+var routineDefs = { 
   var routine;
 
   (
     instrument: \FreeVerb2x2,
-    reverbCf: config[\busIndexes]["reverb"][0],
     out: 0,
     in: 3,
   ).play;
@@ -55,7 +53,6 @@ var routineDefs = { | config |
               \instrument: \saw3,
               \midinote: root + value,
               \out: 3,
-              \synthCf: config[\busIndexes]["synth"][0],
               \spreadThreshold: 100,
             ).play;
 

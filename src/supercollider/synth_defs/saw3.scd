@@ -1,8 +1,7 @@
 SynthDef(\saw3, { |
-    freq, 
-    out, 
-    synthCf,
-    spreadThreshold, 
+    freq,
+    out,
+    spreadThreshold,
     gate = 1
   |
   var
@@ -11,8 +10,10 @@ SynthDef(\saw3, { |
     sawSig, sawAmp, sawSpread,
     atk, dec, slev, rel
   ;
-  
-  krs = In.kr(synthCf, 8);
+  var synthCf = Config.getBusIndexStart("synth");
+  var synthCfLength = Config.getBusLength("synth");
+
+  krs = In.kr(synthCf, synthCfLength);
   sinAmp = krs[0].linexp(0, 1, 1, 2) - 1;
   sinSpread = krs[1].linexp(0, 1, 1, spreadThreshold) - 1;
 

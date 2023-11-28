@@ -11,7 +11,7 @@ MidiBridge {
     controllers = Dictionary();
 
     MIDIClient.init;
-    MIDIClient.destinations;
+    // MIDIClient.destinations;
   }
   
   *silenceAll {
