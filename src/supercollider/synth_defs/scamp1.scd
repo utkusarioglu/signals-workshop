@@ -11,8 +11,8 @@ var define = { | out |
       var synth, sig, env, pan2;
 
       krs = In.kr(
-        Config.getBusIndexStart("scamp1"), 
-        Config.getBusLength("scamp1")
+        Runtime.getBusIndexStart("scamp1"), 
+        Runtime.getBusLength("scamp1")
       );
       amp = krs[0].linlin(0, 1, 0, 1);
       crackliness1 = krs[1].linlin(0, 1, 30, 100);

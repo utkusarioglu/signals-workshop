@@ -10,8 +10,8 @@ SynthDef(\saw3, { |
     sawSig, sawAmp, sawSpread,
     atk, dec, slev, rel
   ;
-  var synthCf = Config.getBusIndexStart("synth");
-  var synthCfLength = Config.getBusLength("synth");
+  var synthCf = Runtime.getBusIndexStart("synth");
+  var synthCfLength = Runtime.getBusLength("synth");
 
   krs = In.kr(synthCf, synthCfLength);
   sinAmp = krs[0].linexp(0, 1, 1, 2) - 1;

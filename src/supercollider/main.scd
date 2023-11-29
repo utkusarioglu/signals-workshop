@@ -1,12 +1,12 @@
-Config.setConfig(JsonLoader("supercollider.config.json").load);
+Runtime.setConfig(JsonLoader("supercollider.config.json").load);
 ScdLoader.setRelPath("src/supercollider");
 
-Client.setup(Config.getHost, Config.getPort).doWhenBooted({ 
+Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
   var busses = ScdLoader.load("control_busses.scd").(s);
 
   s.freeAll;
 
-  SpecsFile.includeDict(Config.getState);
+  SpecsFile.includeDict(Runtime.getState);
   SpecsFile.includeKv(\langPort, NetAddr.langPort);
 
   ScdLoader.load("midi/instruments.scd");

@@ -13,8 +13,8 @@ var logKv = ScdLoader.load("log/kv.scd");
 // };
 
 var busses = { | server, config |
-  var busses = Bus.control(server, Config.defaults.size);
-  busses.setn(Config.defaults);
+  var busses = Bus.control(server, Runtime.defaults.size);
+  busses.setn(Runtime.defaults);
   
   // config[\busOrder].do({ | key |
   //   busIndexes[key] = config[\busses][key].collect({ | ptr |
@@ -24,7 +24,7 @@ var busses = { | server, config |
 
   // publishAssignments.(config);
   
-  Config.setBusIndexes(busses.index);
+  Runtime.setBusIndexes(busses.index);
 
   busses;
 };

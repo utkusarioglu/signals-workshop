@@ -8,8 +8,8 @@ SynthDef(\FreeVerb2x2, {
 
   inSig = In.ar(in, 2);
   krs = In.kr(
-    Config.getBusIndexStart("reverb"), 
-    Config.getBusLength("reverb")
+    Runtime.getBusIndexStart("reverb"), 
+    Runtime.getBusLength("reverb")
   );
 
   amp = krs[0];

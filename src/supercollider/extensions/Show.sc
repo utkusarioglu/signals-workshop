@@ -2,12 +2,23 @@ Show {
   classvar server;
   
   *controlScope { | key |
-    Config.loadFromSpecs;
-    Client.setup(Config.getHost, Config.getPort).doWhenBooted({ 
+    Runtime.loadFromSpecs;
+    Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
       Server.default.scope(
-        numChannels: Config.getBusLength(key),
-        index: Config.getBusIndexStart(key),
-        rate: "control"
+        numChannels: Runtime.getBusLength(key),
+        index: Runtime.getBusIndexStart(key),
+        rate: 'control'
+      );
+    });
+  }
+
+  *audioScope {
+    Runtime.loadFromSpecs;
+    Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
+      Server.default.scope(
+        numChannels: 5,
+        index: 0,
+        rate: 'audio'
       );
     });
   }

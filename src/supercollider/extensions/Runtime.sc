@@ -1,4 +1,4 @@
-Config {
+Runtime {
   classvar state;
   classvar config;
 
@@ -59,7 +59,6 @@ Config {
   *getBusLength { | key |
     var busRange = state[\busses][key];
     var length = busRange[1] - busRange[0] + 1;
-    ("bus range" + busRange).postln;
     ^length;
   }
 
