@@ -1,5 +1,6 @@
 Runtime.setConfig(JsonLoader("supercollider.config.json").load);
 ScdLoader.setRelPath("src/supercollider");
+ShutDown.add({ "Good bye!!".postln });
 
 Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
   var busses = ScdLoader.load("control_busses.scd").(s);
@@ -7,7 +8,7 @@ Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({
   s.freeAll;
 
   SpecsFile.includeDict(Runtime.getState);
-  SpecsFile.includeKv(\langPort, NetAddr.langPort);
+  SpecsFile.includeKv('langPort', NetAddr.langPort);
 
   ScdLoader.load("midi/instruments.scd");
 

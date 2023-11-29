@@ -3,9 +3,8 @@ var controldefs = { | busses |
 
   Runtime.getControlSymbols.do({ | key |
     MidiBridge.addControl(\controls, key, Runtime.getChannel(key));
-
-    OSCdef(key, { | msg |
-      // msg.postln;
+    OSCdef(key, { | msg, time, addr, recvPort |
+      [msg, time, addr, recvPort].postln;
       busses.setAt(Runtime.getBusIndexStart(key) + msg[1], msg[2]);
       MidiBridge.updateControl(key, msg[1], msg[2] * 127);
     }, "/" ++ key);

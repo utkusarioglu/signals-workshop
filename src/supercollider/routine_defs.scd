@@ -21,14 +21,15 @@ var routineDefs = {
 
   OSCdef(\melody, {
     arg msg;
-    var sequence, speed, tempo, root, repeat;
+    var path, sequence, speed, tempo, root, repeat;
 
-    sequence = msg;
-    sequence.removeAt(0);
-    tempo = sequence.removeAt(0);
-    speed = sequence.removeAt(0);
-    root = sequence.removeAt(0);
-    repeat = sequence.removeAt(0);
+    #path, tempo, speed, root, repeat ... sequence = msg;
+    // sequence = msg;
+    // sequence.removeAt(0);
+    // tempo = sequence.removeAt(0);
+    // speed = sequence.removeAt(0);
+    // root = sequence.removeAt(0);
+    // repeat = sequence.removeAt(0);
 
     TempoClock.tempo = tempo / 60;
 
