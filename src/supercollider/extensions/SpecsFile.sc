@@ -4,7 +4,7 @@ SpecsFile {
   
   *initClass {
     all = Dictionary();
-    specsFileBase = ".scd_specs.json";
+    specsFileBase = "artifacts/scd_runtime.json";
   }
   
   *includeKv { | key, value |

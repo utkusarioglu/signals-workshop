@@ -1,6 +1,5 @@
 Runtime.setConfig(JsonLoader("supercollider.config.json").load);
 ScdLoader.setRelPath("src/supercollider");
-ShutDown.add({ "Good bye!!".postln });
 
 Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
   var busses = ScdLoader.load("control_busses.scd").(s);
