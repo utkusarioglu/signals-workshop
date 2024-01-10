@@ -1,5 +1,5 @@
 SERVER_ABSPATH=$(pwd)/src/osc_server
-EXTRA_FILES="$SERVER_ABSPATH/templates/index.html:$(pwd)/.scd_specs.json"
+EXTRA_FILES="$SERVER_ABSPATH/templates/index.html:$(pwd)/artifacts/scd_runtime.json"
 
 cd "$SERVER_ABSPATH"
 

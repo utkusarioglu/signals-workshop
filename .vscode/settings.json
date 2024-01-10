@@ -1,14 +1,4 @@
 {
-  "jupyter.kernels.filter": [
-    {
-      "path": "/opt/conda/bin/python",
-      "type": "pythonEnvironment"
-    },
-    {
-      "path": "/usr/bin/python3",
-      "type": "pythonEnvironment"
-    }
-  ],
   "runOnSave.commands": [
     {
       "match": "\\.env(\\.\\w+)?$",
@@ -22,9 +12,9 @@
       "command": "gh secret set -f .env"
     },
   ],
-  "python.formatting.provider": "black",
-  "python.linting.flake8Enabled": true,
-  "python.linting.enabled": true,
-  "python.linting.flake8Path": "/opt/conda/envs/default/lib/python3.10/site-packages/flake8",
-  "python.analysis.typeCheckingMode": "basic"
+  "python.analysis.typeCheckingMode": "basic",
+  "jupyter.kernels.excludePythonEnvironments": [
+    "/bin/python3",
+    "/usr/bin/python3"
+  ]
 }

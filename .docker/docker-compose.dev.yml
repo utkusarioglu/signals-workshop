@@ -7,7 +7,8 @@ services:
     # image: utkusarioglu/conda-music-devcontainer:experiment-feature-pip-7
     # image: utkusarioglu/conda-music-devcontainer:experiment-feature-pip-33
     extra_hosts:
-      supercollider: host-gateway
+      # supercollider: host-gateway
+      supercollider: 192.168.1.151
     ports:
       - 5000:5000
     # devices:
