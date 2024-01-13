@@ -2,9 +2,11 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO
 from json import dumps
 from sys import stdout
-from common_utils.supercollider import SuperCollider
+from utils.supercollider import SuperCollider
 
-supercollider = SuperCollider("../../artifacts/scd_runtime.json", "supercollider")
+supercollider = SuperCollider(
+    "../../artifacts/scd_runtime.json", "supercollider"
+)
 
 scd_specs = supercollider.get_scd_specs()
 # control_defaults = scd_specs["controls"]
