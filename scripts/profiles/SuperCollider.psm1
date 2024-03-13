@@ -16,10 +16,18 @@ function Set-MergedSclangConfigFile {
 function Start-ScSynth {
   $ScsynthParams = @(
     "-t", 57110,
+    # "-t", 4000,
     "-B", "0.0.0.0",
-    "-l", 32,
+    # "-l", 32,
+    # "-u", 3000,
     # "-H", "ASIO : Focusrite USB ASIO" # Overloads on right channel if this is used
-    "-H", "Windows WASAPI : Analogue 1 + 2"
+    "-H", "Windows WASAPI : Analogue 1 + 2",
+    "-a", 1024,
+    "-i", 2,
+    "-o", 2,
+    "-R", 0,
+    "-C", 2,
+    "-l", 32
   )
 
   scsynth.exe @ScsynthParams 
@@ -28,7 +36,7 @@ function Start-ScSynth {
 
 function Start-ScdConsole {
   $ArtifactPath = Set-MergedSclangConfigFile
-
+  Write-Host $ArtifactPath
   sclang.exe -l $ArtifactPath
 }
 

@@ -11,18 +11,23 @@ Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({
 
   ScdLoader.load("midi/instruments.scd");
 
-  ScdLoader.load("osc/control.scd").(busses);
-  ScdLoader.load("osc/instruments.scd").("piano");
-  
-  ScdLoader.load("synth_defs/saw3.scd");
+  // ScdLoader.load("osc/control.scd").(busses);
+  // ScdLoader.load("osc/instruments.scd").("piano");
+
+  // ScdLoader.load("synth_defs/saw3.scd");
   ScdLoader.load("synth_defs/free_verb_2_2.scd");
-  ScdLoader.load("synth_defs/guitar_reverb.scd");
-  ScdLoader.load("synth_defs/scamp1.scd").(out: 3);
+  
+  (
+    instrument: \FreeVerb2x2,
+    out: 1,
+    in: 3,
+  ).play;
+  // ScdLoader.load("synth_defs/scamp1.scd").(out: 3);
 
-  ScdLoader.load("routine_defs.scd").();
+  // ScdLoader.load("routine_defs.scd").();
 
-  SpecsFile.write;
-  SpecsFile.log;
+  // SpecsFile.write;
+  // SpecsFile.log;
 
   // ScdLoader.load("midi/play.scd");
 });

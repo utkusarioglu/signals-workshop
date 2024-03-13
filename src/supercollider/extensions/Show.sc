@@ -1,7 +1,7 @@
 Show {
   classvar server;
   
-  *controlScope { | key |
+  *control { | key |
     Runtime.loadFromSpecs;
     Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
       Server.default.scope(
@@ -12,7 +12,7 @@ Show {
     });
   }
 
-  *audioScope {
+  *audio {
     Runtime.loadFromSpecs;
     Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
       Server.default.scope(

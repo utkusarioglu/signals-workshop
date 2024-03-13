@@ -15,9 +15,9 @@ var define = { | out |
         Runtime.getBusLength("scamp1")
       );
       amp = krs[0].linlin(0, 1, 0, 1);
-      crackliness1 = krs[1].linlin(0, 1, 30, 100);
+      crackliness1 = krs[1].linlin(0, 1, 30, 50);
       crackliness2 = krs[1].linlin(0, 1, 0, 0.2);
-      crackliness3 = krs[1].linlin(0, 1, 1, 300);
+      crackliness3 = krs[1].linlin(0, 1, 1, 30);
       crackliness4 = krs[1].linexp(0, 1, 0.02, 0.01);
       crackliness5 = krs[1].linlin(0, 1, 0.2, 0.01);
 

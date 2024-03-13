@@ -14,6 +14,12 @@ var routineDefs = {
   var routine;
 
   (
+    instrument: \GuitarReverb,
+    out: 0,
+    in: 2,
+  ).play;
+
+  (
     instrument: \FreeVerb2x2,
     out: 0,
     in: 3,

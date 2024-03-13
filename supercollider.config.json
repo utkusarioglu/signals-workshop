@@ -5,6 +5,28 @@
   },
   "controls": [
     {
+      "symbol": "guitarReverb",
+      "title": "Guitar Reverb",
+      "specs": [
+        {
+          "name":"Amp",
+          "default":0.5
+        },
+        {
+          "name":"Mix",
+          "default":0.3
+        },
+        {
+          "name":"Room",
+          "default":0.5
+        },
+        {
+          "name":"Damp",
+          "default":0.6
+        }
+      ]
+    },
+    {
       "symbol": "synth",
       "title": "Synth",
       "specs": [
