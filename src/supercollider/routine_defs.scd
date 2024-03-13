@@ -14,15 +14,15 @@ var routineDefs = {
   var routine;
 
   (
-    instrument: \GuitarReverb,
+    instrument: \Guitar1,
+    in: 8,
     out: 0,
-    in: 2,
   ).play;
 
   (
     instrument: \FreeVerb2x2,
-    out: 0,
     in: 3,
+    out: 0,
   ).play;
 
   OSCdef(\melody, {

@@ -21,13 +21,16 @@ function Start-ScSynth {
     # "-l", 32,
     # "-u", 3000,
     # "-H", "ASIO : Focusrite USB ASIO" # Overloads on right channel if this is used
-    "-H", "Windows WASAPI : Analogue 1 + 2",
+    # "-H", "Windows WASAPI : Analogue 1 + 2",
+    "-H", "ASIO : Focusrite USB ASIO",
     "-a", 1024,
-    "-i", 2,
-    "-o", 2,
+    "-i", 8,
+    "-o", 8,
     "-R", 0,
     "-C", 2,
     "-l", 32
+    # ,
+    # "-z", 2
   )
 
   scsynth.exe @ScsynthParams 

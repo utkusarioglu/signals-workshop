@@ -5,8 +5,8 @@
   },
   "controls": [
     {
-      "symbol": "guitarReverb",
-      "title": "Guitar Reverb",
+      "symbol": "guitar1",
+      "title": "Guitar 1",
       "specs": [
         {
           "name":"Amp",

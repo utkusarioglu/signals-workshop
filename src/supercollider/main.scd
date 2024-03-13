@@ -16,7 +16,7 @@ Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({
   
   ScdLoader.load("synth_defs/saw3.scd");
   ScdLoader.load("synth_defs/free_verb_2_2.scd");
-  ScdLoader.load("synth_defs/guitar_reverb.scd");
+  ScdLoader.load("synth_defs/guitar1.scd");
   ScdLoader.load("synth_defs/scamp1.scd").(out: 3);
 
   ScdLoader.load("routine_defs.scd").();
@@ -26,5 +26,3 @@ Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({
 
   // ScdLoader.load("midi/play.scd");
 });
-
-"after".postln;
