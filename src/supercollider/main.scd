@@ -5,6 +5,7 @@ Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({
   var busses = ScdLoader.load("control_busses.scd").(s);
 
   s.freeAll;
+  // s.latency = 0.12;
 
   SpecsFile.includeDict(Runtime.getState);
   SpecsFile.includeKv('langPort', NetAddr.langPort);

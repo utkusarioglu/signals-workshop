@@ -10,14 +10,18 @@ var logSpecs = { | tempo, speed, root, repeat, sequenceSize |
     logKv.("Size", sequenceSize, *common);
 };
 
-var routineDefs = { 
-  var routine;
-
+var guitar = {
   (
     instrument: \Guitar1,
-    in: 8,
-    out: 0,
+    inBus: 8,
+    outBus: 0,
   ).play;
+
+  "Guitar Routine enabled".postln;
+};
+
+var python = { 
+  var routine;
 
   (
     instrument: \FreeVerb2x2,
@@ -70,6 +74,13 @@ var routineDefs = {
       routine.play;
     });
   }, "/melody");
+
+  "Python routine enabled".postln;
+};
+
+var routineDefs = {
+  guitar.();
+  python.();
 };
 
 routineDefs;

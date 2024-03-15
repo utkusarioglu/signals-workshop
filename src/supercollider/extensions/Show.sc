@@ -16,7 +16,7 @@ Show {
     Runtime.loadFromSpecs;
     Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
       Server.default.scope(
-        numChannels: 5,
+        numChannels: 12,
         index: 0,
         rate: 'audio'
       );
