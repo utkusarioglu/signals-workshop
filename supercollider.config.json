@@ -9,20 +9,43 @@
       "title": "Guitar 1",
       "specs": [
         {
-          "name":"Amp",
-          "default":0.5
+          "name": "Wet",
+          "default": 1
         },
         {
-          "name":"Mix",
-          "default":0.3
+          "name": "Amp",
+          "default": 0.9,
+          "group": "Dist"
         },
         {
-          "name":"Room",
-          "default":0.5
+          "name": "Smooth",
+          "default": 0.5,
+          "group": "Dist"
         },
         {
-          "name":"Damp",
-          "default":0.6
+          "name": "Mul",
+          "default": 0.25,
+          "group": "Dist"
+        },
+        {
+          "name": "HiSh Cut",
+          "default": 0.75,
+          "group": "Shelf"
+        },
+        {
+          "name": "HiSh DB",
+          "default": 0.8,
+          "group": "Shelf"
+        },
+        {
+          "name": "LoSh Cut",
+          "default": 0.25,
+          "group": "Shelf"
+        },
+        {
+          "name": "LoSh DB",
+          "default": 0.75,
+          "group": "Shelf"
         }
       ]
     },

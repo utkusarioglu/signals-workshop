@@ -4,7 +4,7 @@ ScdLoader.setRelPath("src/supercollider");
 Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
   var busses = ScdLoader.load("control_busses.scd").(s);
 
-  s.freeAll;
+  s.freeAll(true);
   // s.latency = 0.12;
 
   SpecsFile.includeDict(Runtime.getState);

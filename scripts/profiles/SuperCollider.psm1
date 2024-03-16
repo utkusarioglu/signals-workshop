@@ -13,6 +13,24 @@ function Set-MergedSclangConfigFile {
   return $ArtifactPath.split("::")[1]
 }
 
+function Watch-Scsynth {
+  $ScsynthRunning = Get-Process "scsynth" -ErrorAction "SilentlyContinue"
+  if (-Not($ScsynthRunning)) {
+    Write-Error "Error: Scsyth is not running"
+    Return
+  }
+  $RegisterArgs = @{
+    InputObject = $ScsynthRunning
+    EventName = "Exited"
+    Action = {
+      Write-Host "Scsynth Exited"
+      [Environment]::Exit(0)
+    }
+    SourceIdentifier = "ScsyntExited"
+  }
+  $ObjectEvent = Register-ObjectEvent @RegisterArgs
+}
+
 function Start-ScSynth {
   $ScsynthParams = @(
     "-t", 57110,
@@ -36,10 +54,8 @@ function Start-ScSynth {
   scsynth.exe @ScsynthParams 
 }
 
-
 function Start-ScdConsole {
   $ArtifactPath = Set-MergedSclangConfigFile
-  Write-Host $ArtifactPath
   sclang.exe -l $ArtifactPath
 }
 
@@ -63,6 +79,7 @@ function Watch-Scd {
     CallbackString = "sclang.exe -l ${SclangConfigPath} ${FileAbspath}"
   }
 
+  Watch-Scsynth
   Watch-File @FileChangeArgs
 }
 
