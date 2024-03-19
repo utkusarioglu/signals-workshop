@@ -16,8 +16,7 @@ function Set-MergedSclangConfigFile {
 function Watch-Scsynth {
   $ScsynthRunning = Get-Process "scsynth" -ErrorAction "SilentlyContinue"
   if (-Not($ScsynthRunning)) {
-    Write-Error "Error: Scsyth is not running"
-    Return
+    Throw "Scsyth is not running"
   }
   $RegisterArgs = @{
     InputObject = $ScsynthRunning
@@ -62,21 +61,32 @@ function Start-ScdConsole {
 function Watch-Scd {
   Param (
     [Parameter(Mandatory = $True)]
-    [string]$Filename
+    [string]$FileRelPath,
+    [string]$WorkingDirectory
   )
 
-  $WorkingDirectory = @(
-    $(Get-Location).Path.Split("::")[1]
-    "src\supercollider"
+  $FileAbspath = @( 
+    $(Get-Location).Path.Split("::")[1],
+    $FileRelPath 
   ) -Join "\"
 
+  $File = Get-ChildItem $FileAbspath
+  $Filename = $File.Name
+  $FileDirectoryName = $File.DirectoryName
+
+  if($WorkingDirectory -eq "") {
+    $WorkingDirectory = $FileDirectoryName
+  } else {
+    $WorkingDirectory = Resolve-Path $WorkingDirectory
+  }
+
   $SclangConfigPath = Set-MergedSclangConfigFile
-  $FileAbspath = @( $WorkingDirectory, $Filename ) -Join "\"
 
   $FileChangeArgs = @{
     FileAbsPath = $FileAbspath
     WorkingDirectory = $WorkingDirectory
-    CallbackString = "sclang.exe -l ${SclangConfigPath} ${FileAbspath}"
+    Filter = "*.scd"
+    CallbackString = "sclang.exe -l ${SclangConfigPath} ${FileAbsPath}"
   }
 
   Watch-Scsynth
