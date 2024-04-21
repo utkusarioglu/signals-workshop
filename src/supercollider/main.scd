@@ -23,7 +23,5 @@ Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({
   ScdLoader.load("routine_defs.scd").();
 
   SpecsFile.write;
-  SpecsFile.log;
-
-  // ScdLoader.load("midi/play.scd");
+  SpecsFile.postReady;
 });

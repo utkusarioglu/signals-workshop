@@ -58,17 +58,27 @@ function Start-ScdConsole {
   sclang.exe -l $ArtifactPath
 }
 
-function Watch-Scd {
+function Get-SclangCommand {
   Param (
     [Parameter(Mandatory = $True)]
-    [string]$FileRelPath,
-    [string]$WorkingDirectory
+    [string]$FileRelPath
   )
 
   $FileAbspath = @( 
     $(Get-Location).Path.Split("::")[1],
     $FileRelPath 
   ) -Join "\"
+
+  $SclangConfigPath = Set-MergedSclangConfigFile
+  Return "sclang.exe -l ${SclangConfigPath} ${FileAbsPath}"
+}
+
+function Watch-Scd {
+  Param (
+    [Parameter(Mandatory = $True)]
+    [string]$FileRelPath,
+    [string]$WorkingDirectory
+  )
 
   $File = Get-ChildItem $FileAbspath
   $Filename = $File.Name
@@ -80,13 +90,15 @@ function Watch-Scd {
     $WorkingDirectory = Resolve-Path $WorkingDirectory
   }
 
-  $SclangConfigPath = Set-MergedSclangConfigFile
+  # $SclangConfigPath = Set-MergedSclangConfigFile
+  $CallbackString = Get-SclangCommand -FileRelPath $FileRelPath
 
   $FileChangeArgs = @{
     FileAbsPath = $FileAbspath
     WorkingDirectory = $WorkingDirectory
     Filter = "*.scd"
-    CallbackString = "sclang.exe -l ${SclangConfigPath} ${FileAbsPath}"
+    # CallbackString = "sclang.exe -l ${SclangConfigPath} ${FileAbsPath}"
+    CallbackString = $CallbackString
   }
 
   Watch-Scsynth
@@ -98,3 +110,4 @@ Export-ModuleMember -Function Start-ScSynth
 Export-ModuleMember -Function Start-ScdConsole
 
 Export-ModuleMember -Function Start-OscServer
+Export-ModuleMember -Function Get-SclangCommand

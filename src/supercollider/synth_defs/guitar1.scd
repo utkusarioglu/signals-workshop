@@ -29,6 +29,7 @@ SynthDef(\Guitar1, {
     mul: 1.0, 
     add: 0.0
   );
+  // out1 = tanh(out1 * krs[3].linexp(0, 1, 1, 100000)) * krs[1];
   out1 = CrossoverDistortion.ar(
     out1, 
     amp: krs[1].linexp(0, 1, 0.0001, 0.1), 

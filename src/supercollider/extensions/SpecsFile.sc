@@ -38,7 +38,7 @@ SpecsFile {
     ^specsFileAbsPath;
   }
 
-  *log {
+  *postReady {
     ("Specs written to '" ++ specsFileBase ++ "'.").postln;
     [
       "Client connected to '", 
@@ -47,6 +47,8 @@ SpecsFile {
       all[\config][\connection][\port], 
       "'."
     ].reduce('++').postln;
+
+    "Sclang ready.".postln;
   }
 
   *checkIfExists {
