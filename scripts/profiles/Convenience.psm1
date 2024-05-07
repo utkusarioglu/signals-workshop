@@ -41,6 +41,7 @@ function Start-Components {
   $OscServerProcess = $Null
   $ScSynthProcess = $Null
   $SclangProcess = $Null
+  $Timeout = 15
 
   if($ScSynthProcess -eq $Null) {
     $CallbackString="Start-Scsynth"
@@ -69,7 +70,7 @@ function Start-Components {
     $WaitLogLineParams = @{
       LogPath = $ScsynthStdOut
       Line = "SuperCollider 3 server ready."
-      Timeout = 5
+      Timeout = $Timeout
     }
     $Success = Wait-LogLine @WaitLogLineParams
     if(-Not $Success) {
@@ -106,7 +107,7 @@ function Start-Components {
     $WaitLogLineParams = @{
       LogPath = $SclangStdOut
       Line = "Sclang ready."
-      Timeout = 5
+      Timeout = $Timeout
     }
     $Success = Wait-LogLine @WaitLogLineParams
     if(-Not $Success) {
@@ -152,4 +153,14 @@ function Start-ScdUtils {
   Start-ScdConsole
 }
 
+function Stop-ScdUtils {
+  Get-Process -Name "sc*" | ForEach-Object { Stop-Process -Id $_.Id }
+
+  $CONTAINER_REPO_PATH = '/utkusarioglu-com/workshops/signals-workshop'
+  $DISTRO_NAME = 'u-Boulanger'
+  docker -c ${DISTRO_NAME} exec -t 'docker-signals-workshop-1' `
+    bash -c "cd ${CONTAINER_REPO_PATH} && scripts/osc-server/stop-osc-server.sh"
+}
+
 Export-ModuleMember -Function Start-ScdUtils
+Export-ModuleMember -Function Stop-ScdUtils
