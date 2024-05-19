@@ -12,8 +12,8 @@ var oscInstrument = { | key |
         \type: \midi,
         \midiout: instrument,
         \midinote: msg[2],
-        \dur: msg[4],
-        \amp: msg[3]
+        \amp: msg[3],
+        \dur: msg[4]
         // \velocity: msg[3],
       ).play;
 

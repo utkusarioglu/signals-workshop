@@ -14,7 +14,6 @@ class SuperCollider:
     def send_osc_message(self, path, message) -> None:
         osc_client = self.create_udp_client()
         osc_client.send_message(path, message)
-        self._print({"path": path, "message": message})
 
     def send_melody(
         self,
