@@ -146,16 +146,24 @@ function Start-Components {
 }
 
 function Start-ScdUtils {
+  Stop-ScdUtils
+
   if(-Not $(Start-Components)) {
     Return
   }
+
   Write-Title 'ScdConsole'
   Start-ScdConsole
 }
 
 function Stop-ScdUtils {
-  Get-Process -Name "sc*" | ForEach-Object { Stop-Process -Id $_.Id }
+  foreach($app in @("sclang", "scsynth")) {
+    Write-Host "Stopping ${app}…"
+    Get-Process -Name "${app}" -ErrorAction SilentlyContinue 
+      | ForEach-Object { Stop-Process -Id $_.Id }
+  }
 
+  Write-Host "Stopping flask…"
   $CONTAINER_REPO_PATH = '/utkusarioglu-com/workshops/signals-workshop'
   $DISTRO_NAME = 'u-Boulanger'
   docker -c ${DISTRO_NAME} exec -t 'docker-signals-workshop-1' `
