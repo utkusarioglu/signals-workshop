@@ -13,4 +13,9 @@ Client {
 
     ^server;
   }
+
+  *console {
+    Client.setup;
+    Show.control(\guitar1);
+  }
 }

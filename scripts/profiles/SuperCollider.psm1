@@ -33,21 +33,16 @@ function Watch-Scsynth {
 function Start-ScSynth {
   $ScsynthParams = @(
     "-t", 57110,
-    # "-t", 4000,
     "-B", "0.0.0.0",
-    # "-l", 32,
-    # "-u", 3000,
-    # "-H", "ASIO : Focusrite USB ASIO" # Overloads on right channel if this is used
-    # "-H", "Windows WASAPI : Analogue 1 + 2",
     "-H", "ASIO : Focusrite USB ASIO",
+    # "-H", "ASIO : ASIO4ALL v2",
     "-a", 1024,
     "-i", 8,
     "-o", 8,
     "-R", 0,
     "-C", 2,
-    "-l", 32
-    # ,
-    # "-z", 2
+    "-l", 32,
+    "-S", 96000
   )
 
   scsynth.exe @ScsynthParams 
