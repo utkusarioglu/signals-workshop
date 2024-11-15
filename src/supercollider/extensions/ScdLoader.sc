@@ -17,4 +17,16 @@ ScdLoader {
     ].reduce('++');
     ^(fileAbsPath.load);
   }
+
+  *temp { | tempName |
+    var tempAbsPath = [
+      workingAbsPath, 
+      Platform.pathSeparator,
+      "temp",
+      Platform.pathSeparator,
+      tempName,
+      ".scd"
+    ].reduce('++');
+    ^(tempAbsPath.load);
+  }
 }
