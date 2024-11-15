@@ -16,7 +16,7 @@ Client {
 
   *console {
     Client.setup;
-    ScdLoader.setRelPath("src/supercollider");
+    Load.setRelPath("src/supercollider");
     Show.control(\guitar1);
   }
 }

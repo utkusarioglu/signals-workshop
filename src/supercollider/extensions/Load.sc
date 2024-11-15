@@ -1,4 +1,4 @@
-ScdLoader {
+Load {
   classvar workingAbsPath;
 
   *setRelPath { | relPath |
@@ -9,7 +9,7 @@ ScdLoader {
     ].reduce('++');
   }
 
-  *load { | fileRelpath |
+  *path { | fileRelpath |
     var fileAbsPath = [
       workingAbsPath, 
       Platform.pathSeparator,

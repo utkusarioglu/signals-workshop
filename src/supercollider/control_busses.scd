@@ -1,4 +1,4 @@
-var logKv = ScdLoader.load("log/kv.scd");
+var logKv = Load.path("log/kv.scd");
 
 // var publishAssignments = { | config |
 //   "Control assignments:".postln;
