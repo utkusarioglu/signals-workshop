@@ -1,8 +1,8 @@
 function Set-MergedSclangConfigFile {
-  $pwd = $(pwd).Path.Split("::")[1]
-  $ArtifactPath = "$(pwd)\artifacts\sclang_config_merged.yaml"
+  $Pwd = $(pwd).Path.Split("::")[1]
+  $ArtifactPath = "$(Pwd)\artifacts\sclang_config_merged.yaml"
   $DefaultConfigPath = "C:\Users\Utkus\AppData\Local\Supercollider\sclang_conf.yaml"
-  $RepoConfigPath = "${pwd}\sclang_conf.yaml"
+  $RepoConfigPath = "${Pwd}\sclang_conf.yaml"
 
   yq eval-all `
     '. as $item ireduce ({}; . *+ $item)' `
@@ -31,8 +31,15 @@ function Watch-Scsynth {
 }
 
 function Start-ScSynth {
+  $Pwd = $(pwd).Path.Split("::")[1]
+  $ScConfigPath = "${Pwd}\sc.config.json"
+  $ScConfig = Get-Content $ScConfigPath | ConvertFrom-Json 
+  $Port = $ScConfig.connection.port;
+  Write-Host "Starting scsynth on port ${Port}…"
+
   $ScsynthParams = @(
-    "-t", 57110,
+    "-t", $Port
+    # "-u", 57110,
     "-B", "0.0.0.0",
     "-H", "ASIO : Focusrite USB ASIO",
     # "-H", "ASIO : ASIO4ALL v2",

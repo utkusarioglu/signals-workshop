@@ -18,9 +18,9 @@
         "ms-python.python",
         "ms-toolsai.jupyter",
         "ms-python.black-formatter",
-        "jatinchowdhury18.vscode-supercollider",
         "ms-vscode.powershell",
-        "tamasfe.even-better-toml"
+        "tamasfe.even-better-toml",
+        "salkin-mada.language-supercollider"
       ]
     }
   },

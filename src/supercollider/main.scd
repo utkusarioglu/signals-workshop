@@ -1,4 +1,4 @@
-Runtime.setConfig(JsonLoader("supercollider.config.json").load);
+Runtime.setConfig(JsonLoader("sc.config.json").load);
 Load.setRelPath("src/supercollider");
 
 Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
@@ -8,7 +8,7 @@ Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({
   // s.latency = 0.12;
 
   SpecsFile.includeDict(Runtime.getState);
-  SpecsFile.includeKv('langPort', NetAddr.langPort);
+  SpecsFile.includeKv(\langPort, NetAddr.langPort);
 
   Load.path("midi/instruments.scd");
 
