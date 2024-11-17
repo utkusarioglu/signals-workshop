@@ -2,7 +2,7 @@ Runtime.setConfig(JsonLoader("sc.config.json").load);
 Load.setRelPath("src/supercollider");
 
 Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({ 
-  var busses = Load.path("control_busses.scd").(s);
+  var busses = Load.scd("control_busses").(s);
 
   s.freeAll(true);
   // s.latency = 0.12;
@@ -10,17 +10,17 @@ Client.setup(Runtime.getHost, Runtime.getPort).doWhenBooted({
   SpecsFile.includeDict(Runtime.getState);
   SpecsFile.includeKv(\langPort, NetAddr.langPort);
 
-  Load.path("midi/instruments.scd");
+  Load.scd("midi/instruments");
 
-  Load.path("osc/control.scd").(busses);
-  Load.path("osc/instruments.scd").("piano");
+  Load.scd("osc/control").(busses);
+  Load.scd("osc/instruments").("piano");
   
-  Load.path("synth_defs/saw3.scd");
-  Load.path("synth_defs/free_verb_2_2.scd");
-  Load.path("synth_defs/guitar1.scd");
-  Load.path("synth_defs/scamp1.scd").(out: 3);
+  Load.scd("synth_defs/saw3");
+  Load.scd("synth_defs/free_verb_2_2");
+  Load.scd("synth_defs/guitar1");
+  Load.scd("synth_defs/scamp1").(out: 3);
 
-  Load.path("routine_defs.scd").();
+  Load.scd("routine_defs").();
 
   SpecsFile.write;
   SpecsFile.postReady;

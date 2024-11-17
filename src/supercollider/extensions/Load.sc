@@ -9,11 +9,12 @@ Load {
     ].reduce('++');
   }
 
-  *path { | fileRelpath |
+  *scd { | fileRelpath |
     var fileAbsPath = [
       workingAbsPath, 
       Platform.pathSeparator,
-      fileRelpath
+      fileRelpath,
+      ".scd"
     ].reduce('++');
     ^(fileAbsPath.load);
   }
