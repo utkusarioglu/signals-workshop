@@ -1,47 +1,24 @@
-SynthDef(\aaa, { | freq = 300 |
-  var gen, env, snd;
+var midi, dur;
+midi = Routine({
+    [60, 72, 71, 67, 69, 71, 72, 60, 69, 67].do({ |midi| midi.yield });
+});
+dur = Routine({
+    [2, 2, 1, 0.5, 0.5, 1, 1, 2, 2, 3].do({ |dur| dur.yield });
+});
 
-  env = Env(
-    levels: [0, 1, 0.5, 0],
-    times: [0.1, 0.2, 0.5, 1],
-  );
-
-  gen = EnvGen.kr(env, doneAction: Done.freeSelf);
-
-  snd = Saw.ar(freq, 0) * gen;
-
-  Out.ar(1, snd);
+SynthDef(\smooth, { |freq = 440, sustain = 1, amp = 0.5, out|
+    var sig;
+    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.linen(0.05, sustain, 0.1), doneAction: Done.freeSelf);
+    Out.ar(out, sig ! 2)
 }).add;
 
-t = Task {
-  var name, out, spreadThreshold, common, freqs, steps, tonic, bpm, division;
-  tonic = 400;
-  steps = [0, 3, 7, 10];
-  bpm = 80;
-  division = steps.size;
-
-  name = \default;
-  out = 0;
-  spreadThreshold = 4;
-  common = [\out, out, \spreadThreshold, spreadThreshold];
-  freqs = steps.collect({ | s |
-    tonic * (2 ** (s / 12));
-  });
-  freqs.postln;
-
-  freqs.do({ | freq |
-    Synth(name, [\freq, freq].addAll(common)); 
-    (60 / bpm / division).wait;
-  });
-
-  // 2.wait;
-  // s.freeAll;
-};
-
-t.start;
-2.wait;
-t.pause;
-2.wait;
-t.resume;
-2.wait;
-t.stop;
+r = Task({
+    var delta;
+    while {
+        delta = dur.next;
+        delta.notNil
+    } {
+        Synth(\smooth, [freq: midi.next.midicps, sustain: delta]);
+        delta.yield;
+    }
+}).play(quant: TempoClock.default.beats + 1.0);

@@ -4,7 +4,7 @@ SpecsFile {
   
   *initClass {
     all = Dictionary();
-    specsFileBase = "artifacts/scd_runtime.json";
+    specsFileBase = ["artifacts", "scd_runtime.json"].reduce('+/+');
   }
   
   *includeKv { | key, value |
@@ -30,11 +30,7 @@ SpecsFile {
   }
 
   *getSpecsFileAbsPath {
-    var specsFileAbsPath = [
-      File.getcwd,
-      Platform.pathSeparator,
-      specsFileBase
-    ].reduce('++');
+    var specsFileAbsPath = [File.getcwd, specsFileBase].reduce('+/+');
     ^specsFileAbsPath;
   }
 

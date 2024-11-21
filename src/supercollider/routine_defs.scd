@@ -1,4 +1,4 @@
-var logKv = Load.scd("log/kv.scd");
+var logKv = Load.scd("log", "kv");
 
 var logSpecs = { | tempo, speed, root, repeat, sequenceSize |
     var common = [2, 8];
