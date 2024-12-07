@@ -1,15 +1,21 @@
-r = Routine({
-  var filePath;
+SynthDef(\aa, { | freq |
+  var env, sig;
 
-  filePath = ["assets", "wav", "sonic-pi", "ambi-choir.wav"].reduce('+/+');
-  if(
-    File.exists(filePath).not
-    {}
-    {[filePath, " does not exist"].reduce('++').postln}
-  );
-  b = Buffer.read(s,filePath);
-  s.sync;
-  {PlayBuf(2, b, b.sampleRate / s.sampleRate)}.play;
+  env = Env(
+    levels: [0, 1, 0.5, 0],
+    times: [0.1, 0.2, 0.5, 1],
+  ).ar();
+
+  sig = SinOsc.ar(freq) * env;
+  Out.ar(0, sig.dup);
+}).add;
+
+// s.sync;
+
+a = Routine({
+  Synth(\aa, [freq: 400]);
+  2.wait;
+  Synth(\aa, [freq: 600]);
 });
 
-r.play;
+// r.play;

@@ -35,11 +35,11 @@ function Start-ScSynth {
   $ScConfigPath = "${Pwd}\sc.config.json"
   $ScConfig = Get-Content $ScConfigPath | ConvertFrom-Json 
   $Port = $ScConfig.connection.port;
-  Write-Host "Starting scsynth on port ${Port}…"
+  Write-Host "Starting scsynth on TCP port ${Port}…"
 
   $ScsynthParams = @(
     "-t", $Port
-    # "-u", 57110,
+    # "-u", $Port,
     "-B", "0.0.0.0",
     "-H", "ASIO : Focusrite USB ASIO",
     # "-H", "ASIO : ASIO4ALL v2",
@@ -49,7 +49,9 @@ function Start-ScSynth {
     "-R", 0,
     "-C", 2,
     "-l", 32,
-    "-S", 96000
+    "-S", 96000,
+    "-Z", 96
+    # "-v"
   )
 
   scsynth.exe @ScsynthParams 

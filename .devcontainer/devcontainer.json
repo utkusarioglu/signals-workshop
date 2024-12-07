@@ -9,6 +9,7 @@
   "customizations": {
     "vscode": {
       "settings": {
+        "remote.autoForwardPorts": false,
         "workbench.colorCustomizations": {
           "activityBar.background": "#430157",
           "activityBar.foreground": "#ffffff"

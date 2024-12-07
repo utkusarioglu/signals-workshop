@@ -9,16 +9,21 @@ Client {
 
     options = ServerOptions.new;
     options.protocol_(\tcp);
+    // options.protocol_(\udp);
     server = Server.remote(\remote, NetAddr(host, port), options); // set to correct address and port
     server.addr.connect;
     Server.default = server;
+
+    ~rel = ["src", "supercollider"].reduce('+/+');
+    ~abs = [File.getcwd, ~screl].reduce('+/+');
+    ~temp = [~abs, "temp"].reduce('+/+');
 
     ^server;
   }
 
   *console {
     Client.setup;
-    Load.setRelPath("src", "supercollider");
+    Load.setRelPath(~rel);
     Show.control(\guitar1);
   }
 }
