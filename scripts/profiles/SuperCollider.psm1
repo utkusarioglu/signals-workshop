@@ -41,8 +41,16 @@ function Start-ScSynth {
     "-t", $Port
     # "-u", $Port,
     "-B", "0.0.0.0",
+    
     "-H", "ASIO : Focusrite USB ASIO",
     # "-H", "ASIO : ASIO4ALL v2",
+
+    # "-H", "ASIO : Voicemeeter AUX Virtual ASIO", # device #59 with 8 ins 8 outs)
+    # "-H", "ASIO : Voicemeeter Insert Virtual ASIO", # device #60 with 22 ins 22 outs)
+    # "-H", "ASIO : Voicemeeter Potato Insert Vi...", # device #61 with 34 ins 34 outs)
+    # "-H", "ASIO : Voicemeeter VAIO3 Virtual ASIO", # device #62 with 8 ins 8 outs)
+    # "-H", "ASIO : Voicemeeter Virtual ASIO", # device #63 with 8 ins 8 outs)
+    
     "-a", 1024,
     "-i", 8,
     "-o", 8,
@@ -50,6 +58,7 @@ function Start-ScSynth {
     "-C", 2,
     "-l", 32,
     "-S", 96000,
+    # "-S", 44100,
     "-Z", 96
     # "-v"
   )

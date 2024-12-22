@@ -1,11 +1,6 @@
-version: "3.9"
-
 services:
   signals-workshop:
-    # image: utkusarioglu/conda-music-devcontainer:1.0.15
-    image: utkusarioglu/conda-music-devcontainer:experiment-feat-music-sequencer-8
-    # image: utkusarioglu/conda-music-devcontainer:experiment-feature-pip-7
-    # image: utkusarioglu/conda-music-devcontainer:experiment-feature-pip-33
+    image: utkusarioglu/conda-music-devcontainer:3.13-ubuntu-test-19
     extra_hosts:
       # supercollider: host-gateway
       supercollider: 192.168.1.151
@@ -15,11 +10,35 @@ services:
     #   - $PULSE_SERVER:/dev/snd
     environment:
       PYTHONPATH: /utkusarioglu-com/workshops/signals-workshop/src
-      PULSE_SERVER: ${PULSE_SERVER}
+      PULSE_SERVER: unix:/mnt/wslg/PulseServer
+      # PULSE_SERVER: unix:/run/user/1000/pulse/native
+    # cap_add:
+    #   - SYS_ADMIN
+    # privileged: true
     volumes:
       - type: bind
         source: ..
         target: /utkusarioglu-com/workshops/signals-workshop
+      # - type: bind
+      #   source: /mnt/wslg
+      #   target: /mnt/wslg
+      
       - type: bind
-        source: /mnt/wslg
-        target: /mnt/wslg
+        source: ../remove
+        # target: /etc/pulse
+        target: /home/dev/.config/pulse/
+      
+      - type: bind
+        source: /dev/shm
+        target: /dev/shm
+      
+      - type: bind
+        source: /dev/snd
+        target: /dev/snd
+
+      - type: bind
+        source: /mnt/wslg/PulseServer
+        target: /mnt/wslg/PulseServer
+      # - type: bind
+      #   source: /run/user/1000/pulse/native
+      #   target: /run/user/1000/pulse/native

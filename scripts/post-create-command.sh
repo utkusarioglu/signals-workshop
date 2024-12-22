@@ -1,3 +1,5 @@
 #!/bin/bash
 
-${HOME}/elam/elam.sh repo status
+# ${0%/*}/changes.sh
+
+# ${HOME}/elam/elam.sh repo status

@@ -1,4 +1,6 @@
 Client {
+  classvar <>serverInstance;
+  
   *setup { |
     host = "localhost",
     port = 57110
@@ -9,21 +11,32 @@ Client {
 
     options = ServerOptions.new;
     options.protocol_(\tcp);
-    // options.protocol_(\udp);
-    server = Server.remote(\remote, NetAddr(host, port), options); // set to correct address and port
+    options.inDevice = "ASIO : Focusrite USB ASIO";
+    options.outDevice = "ASIO : Focusrite USB ASIO";
+
+    server = Server.remote(\remote, NetAddr(host, port), options); 
     server.addr.connect;
     Server.default = server;
 
     ~rel = ["src", "supercollider"].reduce('+/+');
-    ~abs = [File.getcwd, ~screl].reduce('+/+');
+    ~abs = [File.getcwd, ~rel].reduce('+/+');
     ~temp = [~abs, "temp"].reduce('+/+');
-
+    
+    serverInstance = server;
+    
     ^server;
   }
 
   *console {
     Client.setup;
     Load.setRelPath(~rel);
-    Show.control(\guitar1);
+    // Show.control(\guitar1);
+  }
+
+  *reset {
+    serverInstance.freeAll;              // Free all nodes
+    serverInstance.defaultGroup.release; // Release default group
+    Buffer.freeAll(serverInstance);      // Free all buffers
+    serverInstance.sendMsg("/d_freeAll"); // Clear all SynthDefs
   }
 }
