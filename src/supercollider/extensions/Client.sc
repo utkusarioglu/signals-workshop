@@ -18,9 +18,9 @@ Client {
     server.addr.connect;
     Server.default = server;
 
-    ~rel = ["src", "supercollider"].reduce('+/+');
-    ~abs = [File.getcwd, ~rel].reduce('+/+');
-    ~temp = [~abs, "temp"].reduce('+/+');
+    // ~rel = ["src", "supercollider"].reduce('+/+');
+    // ~abs = [File.getcwd, ~rel].reduce('+/+');
+    ~temp = [File.getcwd, "temp"].reduce('+/+');
     
     serverInstance = server;
     
@@ -29,7 +29,7 @@ Client {
 
   *console {
     Client.setup;
-    Load.setRelPath(~rel);
+    // Load.setRelPath("src/supercollider");
     // Show.control(\guitar1);
   }
 

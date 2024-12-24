@@ -1,3 +1,5 @@
+$ScdWslPath = "\\wsl.localhost\u-Boulanger\home\utkusarioglu\dev\workshops\signals-workshop\src\supercollider"
+
 function Set-MergedSclangConfigFile {
   $Pwd = $(pwd).Path.Split("::")[1]
   $ArtifactPath = "$(Pwd)\artifacts\sclang_config_merged.yaml"
@@ -32,7 +34,8 @@ function Watch-Scsynth {
 
 function Start-ScSynth {
   $Pwd = $(pwd).Path.Split("::")[1]
-  $ScConfigPath = "${Pwd}\sc.config.json"
+  # $ScConfigPath = "${Pwd}\sc.config.json"
+  $ScConfigPath = "${pwd}\sc.config.json"
   $ScConfig = Get-Content $ScConfigPath | ConvertFrom-Json 
   $Port = $ScConfig.connection.port;
   Write-Host "Starting scsynth on TCP port ${Port}…"
@@ -68,7 +71,8 @@ function Start-ScSynth {
 
 function Start-ScdConsole {
   $ArtifactPath = Set-MergedSclangConfigFile
-  sclang.exe -l $ArtifactPath
+  # sclang.exe -l $ArtifactPath -d "${pwd}/src/supercollider"
+  sclang.exe -l $ArtifactPath -d ${ScdWslPath}
 }
 
 function Get-SclangCommand {
@@ -83,7 +87,7 @@ function Get-SclangCommand {
   ) -Join "\"
 
   $SclangConfigPath = Set-MergedSclangConfigFile
-  Return "sclang.exe -l ${SclangConfigPath} ${FileAbsPath}"
+  Return "sclang.exe -d ${ScdWslPath} -l ${SclangConfigPath} ${FileAbsPath} "
 }
 
 function Watch-Scd {

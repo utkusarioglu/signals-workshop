@@ -1,3 +1,4 @@
 includePaths:
-  - \\wsl.localhost\u-Boulanger\home\utkusarioglu\dev\workshops\signals-workshop\src\supercollider\extensions
+  # - \\wsl.localhost\u-Boulanger\home\utkusarioglu\dev\workshops\signals-workshop\src\supercollider\extensions
+  - \\wsl.localhost\u-Boulanger\home\utkusarioglu\dev\workshops\signals-workshop\src\supercollider
 postInlineWarnings: true

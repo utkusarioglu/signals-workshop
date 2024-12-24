@@ -1,4 +1,4 @@
-var logKv = Load.scd("log", "kv");
+var logKv = Load.scd("log/kv");
 
 var busses = { | server, config |
   var busses = Bus.control(server, Runtime.defaults.size);

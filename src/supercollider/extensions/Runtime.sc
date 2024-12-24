@@ -17,7 +17,7 @@ Runtime {
   }
 
   *loadFromSpecs { 
-    var specsFile = SpecsFile.read;
+    var specsFile = Specs.read;
     state = specsFile;
     config = specsFile[\config];
   }
@@ -68,5 +68,19 @@ Runtime {
 
   *getPort {
     ^config[\connection][\port];
+  }
+
+  *ready {
+    [
+      "Client connected to '", 
+      Runtime.getHost,
+      // all[\config][\connection][\host], 
+      ":", 
+      Runtime.getPort,
+      // all[\config][\connection][\port], 
+      "'."
+    ].reduce('++').postln;
+
+    "Sclang ready.".postln;
   }
 }
