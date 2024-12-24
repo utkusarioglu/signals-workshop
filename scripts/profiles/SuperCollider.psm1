@@ -71,8 +71,7 @@ function Start-ScSynth {
 
 function Start-ScdConsole {
   $ArtifactPath = Set-MergedSclangConfigFile
-  # sclang.exe -l $ArtifactPath -d "${pwd}/src/supercollider"
-  sclang.exe -l $ArtifactPath -d ${ScdWslPath}
+  sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} 
 }
 
 function Get-SclangCommand {
@@ -87,7 +86,7 @@ function Get-SclangCommand {
   ) -Join "\"
 
   $SclangConfigPath = Set-MergedSclangConfigFile
-  Return "sclang.exe -d ${ScdWslPath} -l ${SclangConfigPath} ${FileAbsPath} "
+  Return "sclang.exe -d ${ScdWslPath} -l ${SclangConfigPath} ${FileAbsPath}"
 }
 
 function Watch-Scd {

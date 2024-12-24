@@ -1,6 +1,8 @@
 Client {
-  classvar <>serverInstance;
-  
+  *initClass {
+    thisProcess.argv.postln;
+  }
+
   *setup { |
     host = "localhost",
     port = 57110
@@ -17,12 +19,6 @@ Client {
     server = Server.remote(\remote, NetAddr(host, port), options); 
     server.addr.connect;
     Server.default = server;
-
-    // ~rel = ["src", "supercollider"].reduce('+/+');
-    // ~abs = [File.getcwd, ~rel].reduce('+/+');
-    ~temp = [File.getcwd, "temp"].reduce('+/+');
-    
-    serverInstance = server;
     
     ^server;
   }
@@ -34,9 +30,9 @@ Client {
   }
 
   *reset {
-    serverInstance.freeAll;              // Free all nodes
-    serverInstance.defaultGroup.release; // Release default group
-    Buffer.freeAll(serverInstance);      // Free all buffers
-    serverInstance.sendMsg("/d_freeAll"); // Clear all SynthDefs
+    Server.default.freeAll;              // Free all nodes
+    Server.default.defaultGroup.release; // Release default group
+    Buffer.freeAll(Server.default);      // Free all buffers
+    Server.default.sendMsg("/d_freeAll"); // Clear all SynthDefs
   }
 }
