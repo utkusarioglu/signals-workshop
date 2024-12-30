@@ -1,7 +1,7 @@
 Path {
   const maxRepoRootDepth = 10;
   
-  *resolve { | path, cwd |
+  *resolve { | path, cwd, checkIfExists = true |
     var upCount = path.findAll("../").size;
     var relpath = path.replace("../", "").split($/).reduce('+/+');
 
@@ -12,7 +12,14 @@ Path {
     upCount.do({
       cwd = PathName(cwd).parentPath;
     });
-    ^[cwd, relpath].reduce('+/+');
+
+    path = [cwd, relpath].reduce('+/+');
+    
+    if(checkIfExists && File.exists(path).not, {
+      Error("Resolved path % does not exist".format(path)).throw;
+    });
+
+    ^path
   }
 
   *repoRoot { 
@@ -26,21 +33,35 @@ Path {
       });
     });
     if(found.not, {
-      Error("Cannot reach repo root").throw;
+      Error(
+        "Cannot reach repo root after % climbs"
+          .format(maxRepoRootDepth)
+      ).throw;
     });
 
     ^cwd;
   }
 
-  *fromRepoRoot { | relpath |
+  *fromRepoRoot { | relpath, checkIfExists = true |
     var repoRoot = Path.repoRoot;
-    ^Path.resolve(relpath, repoRoot);
+    var path = Path.resolve(relpath, repoRoot);
+    
+    if(checkIfExists && File.exists(path).not, {
+      Error("Repo root path % does not exist".format(path)).throw;
+    });
+
+    ^path;
   }
 
-  *withExtension { | path, ext = "scd" | 
+  *withExtension { | path, ext = "scd", checkIfExists = true | 
     if(path.endsWith("." ++ ext).not, {
-      ^(path ++ "." ++ ext);
+      path = (path ++ "." ++ ext);
     });
-    ^path
+
+    if(checkIfExists && File.exists(path).not, {
+      Error("Path with extension % does not exist".format(path)).throw;
+    });
+
+    ^path;
   }
 }

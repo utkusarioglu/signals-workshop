@@ -27,7 +27,7 @@ function Watch-Scsynth {
       Write-Host "Scsynth Exited"
       [Environment]::Exit(0)
     }
-    SourceIdentifier = "ScsyntExited"
+    SourceIdentifier = "ScsynthExited"
   }
   $ObjectEvent = Register-ObjectEvent @RegisterArgs
 }
@@ -71,7 +71,7 @@ function Start-ScSynth {
 
 function Start-ScdConsole {
   $ArtifactPath = Set-MergedSclangConfigFile
-  sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} 
+  sclang.exe -l ${ArtifactPath} -d ${ScdWslPath}
 }
 
 function Get-SclangCommand {
@@ -86,7 +86,7 @@ function Get-SclangCommand {
   ) -Join "\"
 
   $SclangConfigPath = Set-MergedSclangConfigFile
-  Return "sclang.exe -d ${ScdWslPath} -l ${SclangConfigPath} ${FileAbsPath}"
+  Return "sclang.exe -D -d ${ScdWslPath} -l ${SclangConfigPath} ${FileAbsPath}"
 }
 
 function Watch-Scd {

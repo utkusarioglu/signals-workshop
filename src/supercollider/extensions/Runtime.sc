@@ -74,10 +74,8 @@ Runtime {
     [
       "Client connected to '", 
       Runtime.getHost,
-      // all[\config][\connection][\host], 
       ":", 
       Runtime.getPort,
-      // all[\config][\connection][\port], 
       "'."
     ].reduce('++').postln;
 

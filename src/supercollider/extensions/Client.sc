@@ -23,8 +23,13 @@ Client {
     ^server;
   }
 
-  *console {
-    Client.setup;
+  *console { | tempScript |
+    Client.setup.doWhenBooted({
+      if(tempScript.isNil.not, {
+        Load.temp(tempScript);
+      });
+    });
+
     // Load.setRelPath("src/supercollider");
     // Show.control(\guitar1);
   }

@@ -1,6 +1,6 @@
 Load {
   *scd { | fileRelpath |
-    var fileAbsPath = Path.resolve(fileRelpath);
+    var fileAbsPath = Path.resolve(fileRelpath, checkIfExists: false);
     fileAbsPath = Path.withExtension(fileAbsPath);
     ("Loaded:" + fileAbsPath).postln;
 
@@ -8,7 +8,10 @@ Load {
   }
 
   *temp { | tempName |
-    var fileAbsPath = Path.resolve(["temp", tempName].reduce('+/+'));
+    var fileAbsPath = Path.resolve(
+      ["temp", tempName].reduce('+/+'), 
+      checkIfExists: false
+    );
     fileAbsPath = Path.withExtension(fileAbsPath);
 
     ^(fileAbsPath.load);

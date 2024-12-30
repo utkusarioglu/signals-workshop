@@ -25,7 +25,7 @@ Specs {
 
     ("Specs written to '" ++ absPath ++ "'.").postln;
     this.includeKv(\timestamp, Date.localtime.asString);
-    Json.write(all.asJSON, absPath, "w+");
+    Json.write(all, absPath, "w+");
   }
 
   *read {

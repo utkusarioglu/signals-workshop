@@ -1,5 +1,5 @@
 from pythonosc import udp_client
-from json import loads
+import json
 from typing import Union
 
 PrintSpecs = dict[str, Union[int, float]]
@@ -47,7 +47,7 @@ class SuperCollider:
 
     def _load_scd_specs(self, specs_relpath: str):
         with open(specs_relpath, "r") as specs:
-            scd_config = loads(specs.read())
+            scd_config = json.loads(specs.read())
             return scd_config
 
     def _print(self, print_specs: PrintSpecs):
