@@ -1,11 +1,12 @@
 services:
   signals-workshop:
-    image: utkusarioglu/conda-music-devcontainer:3.13-ubuntu-test-19
+    image: utkusarioglu/conda-music-devcontainer:3.13-ubuntu-test-20
     extra_hosts:
       # supercollider: host-gateway
       supercollider: 192.168.1.151
     ports:
       - 5000:5000
+      - 5005:5005/udp
     # devices:
     #   - $PULSE_SERVER:/dev/snd
     environment:

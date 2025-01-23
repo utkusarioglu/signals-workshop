@@ -13,8 +13,10 @@ Client {
 
     options = ServerOptions.new;
     options.protocol_(\tcp);
+    options.maxLogins = 32;
     options.inDevice = "ASIO : Focusrite USB ASIO";
     options.outDevice = "ASIO : Focusrite USB ASIO";
+    // options.safetyClipThreshold = 1;
 
     server = Server.remote(\remote, NetAddr(host, port), options); 
     server.addr.connect;
@@ -24,12 +26,20 @@ Client {
   }
 
   *console { | tempScript |
-    Client.setup.doWhenBooted({
+    var loadTemp = {
       if(tempScript.isNil.not, {
         Load.temp(tempScript);
       });
+    };
+      
+    if(Server.default.addr.isConnected, {
+      "Already connected.".postln;
+      loadTemp.()
+    }, {
+      Client.setup.doWhenBooted({
+        loadTemp.();
+      });
     });
-
     // Load.setRelPath("src/supercollider");
     // Show.control(\guitar1);
   }
