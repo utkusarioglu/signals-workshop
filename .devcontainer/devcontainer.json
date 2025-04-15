@@ -6,6 +6,7 @@
   ],
   "service": "signals-workshop",
   "workspaceFolder": "/utkusarioglu-com/workshops/signals-workshop",
+  "shutdownAction": "stopCompose",
   "customizations": {
     "vscode": {
       "settings": {

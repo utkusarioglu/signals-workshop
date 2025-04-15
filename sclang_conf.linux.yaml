@@ -1,0 +1,3 @@
+includePaths:
+  - /utkusarioglu-com/workshops/signals-workshop/src/supercollider
+postInlineWarnings: true

@@ -8,7 +8,7 @@
     Out.ar(0, sig);
   }).add;
 
-  Routine({
+  Task {
     s.sync;
     "Creating thu…".postln;
     ~thu = VSTPluginController(Synth(\thu), id: \thu)
@@ -18,5 +18,5 @@
         verbose: true, 
         action: _.editor
       );
-  }).play;
+  }.start;
 }.();

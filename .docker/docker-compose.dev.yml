@@ -1,45 +1,28 @@
 services:
   signals-workshop:
-    image: utkusarioglu/conda-music-devcontainer:3.13-ubuntu-test-20
+    image: utkusarioglu/conda-music-devcontainer:3.13-ubuntu-test-24
     extra_hosts:
       # supercollider: host-gateway
       supercollider: 192.168.1.151
     ports:
       - 5000:5000
       - 5005:5005/udp
-    # devices:
-    #   - $PULSE_SERVER:/dev/snd
     environment:
       PYTHONPATH: /utkusarioglu-com/workshops/signals-workshop/src
       PULSE_SERVER: unix:/mnt/wslg/PulseServer
-      # PULSE_SERVER: unix:/run/user/1000/pulse/native
-    # cap_add:
-    #   - SYS_ADMIN
-    # privileged: true
+
+      ARTIFACTS_ABSPATH: /utkusarioglu-com/workshops/signals-workshop/artifacts
+      ASSETS_ABSPATH: /assets
+
     volumes:
       - type: bind
         source: ..
         target: /utkusarioglu-com/workshops/signals-workshop
-      # - type: bind
-      #   source: /mnt/wslg
-      #   target: /mnt/wslg
-      
-      - type: bind
-        source: ../remove
-        # target: /etc/pulse
-        target: /home/dev/.config/pulse/
-      
-      - type: bind
-        source: /dev/shm
-        target: /dev/shm
-      
-      - type: bind
-        source: /dev/snd
-        target: /dev/snd
 
       - type: bind
         source: /mnt/wslg/PulseServer
         target: /mnt/wslg/PulseServer
-      # - type: bind
-      #   source: /run/user/1000/pulse/native
-      #   target: /run/user/1000/pulse/native
+      
+      - type: bind
+        source: /mnt/d/Audio
+        target: /assets
