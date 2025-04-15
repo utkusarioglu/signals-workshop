@@ -10,6 +10,7 @@ var oscInstrument = { | key |
       "routine start".postln;
       (
         \type: \midi,
+        // BUG why does msg start from 2?
         \midiout: instrument,
         \midinote: msg[2],
         \amp: msg[3],

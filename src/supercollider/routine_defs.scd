@@ -61,9 +61,9 @@ var python = {
             arg value;
 
             (
-              \instrument: \saw3,
+              \instrument: \default,
               \midinote: root + value,
-              \out: 3,
+              \out: 0,
               \spreadThreshold: 100,
             ).play;
 
