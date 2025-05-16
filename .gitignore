@@ -1,3 +1,5 @@
+.mounts
+
 .env
 .env.*
 !.env.example
