@@ -3,6 +3,7 @@ $DISTRO_NAME = 'u-Boulanger'
 # $SERVER_PORT = 5000
 
 function Start-OscServer {
+  Throw "This function is deprecated. Use the bash script from inside the container"
   # Set-WslProxy -Distro $DISTRO_NAME -Port $SERVER_PORT
   # Write-Host "Dont't forget to remove the wsl proxy once the run is terminated"
   Write-Host "This script requires the server port to be accessible. Please check WSL port accessibility if there are any issues"
