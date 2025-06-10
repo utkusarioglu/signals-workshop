@@ -1,6 +1,6 @@
 Client {
   *initClass {
-    thisProcess.argv.postln;
+    // thisProcess.argv.postln;
   }
 
   *setup { |

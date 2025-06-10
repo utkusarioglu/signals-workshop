@@ -71,7 +71,7 @@ function Start-ScSynth {
 
 function Start-ScdConsole {
   $ArtifactPath = Set-MergedSclangConfigFile
-  sclang.exe -l ${ArtifactPath} -d ${ScdWslPath}
+  sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} -r
 }
 
 function Get-SclangCommand {
@@ -86,7 +86,7 @@ function Get-SclangCommand {
   ) -Join "\"
 
   $SclangConfigPath = Set-MergedSclangConfigFile
-  Return "sclang.exe -D -d ${ScdWslPath} -l ${SclangConfigPath} ${FileAbsPath}"
+  Return "sclang.exe -D -d ${ScdWslPath} -l ${SclangConfigPath} ${FileAbsPath} -r"
 }
 
 function Watch-Scd {

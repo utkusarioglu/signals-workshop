@@ -1,5 +1,6 @@
 {
-  OSCdef(\drums).free;
+  OSCdef(\drumsJitter).free;
+  OSCdef(\drumsFlat).free;
 
   Task {
     var tempo;
@@ -8,12 +9,26 @@
     
     tempo = 120;
 
-    OSCdef(\drums, { | msg |
+    OSCdef(\drumsFlat, { | msg |
+      var path, midinote, vel, amp;
+      #path, midinote, vel = msg;
+      
+      midinote.postln;
+      (
+        \type: \vst_midi,
+        \vst: ~drums,
+        \midinote: midinote,
+        // \amp: vel.linlin(0, 127, 0, 1),
+        \amp: vel,
+      ).play;
+    }, "/drums/flat");
+
+    OSCdef(\drumsJitter, { | msg |
       var path, midinote, vel, amp;
       #path, midinote, vel = msg;
       
       case
-        { [36, 59].includes(midinote) } {
+        { [59, 53].includes(midinote) } {
           (
             \type: \vst_midi,
             \vst: ~drums,
@@ -23,13 +38,14 @@
         }
         { [38].includes(midinote) } {
           Task {
-            var jitter = 0.06.rand;
-            2.do({ | i |
+            // var jitter = 0.06.rand;
+            var jitter = 0;
+            1.do({ | i |
               (
                 \type: \vst_midi,
                 \vst: ~drums,
                 \midinote: midinote,
-                \amp: vel.linlin(0, 127, 0, 1 - (i * 0.60)),
+                \amp: vel.linlin(0, 127, 0, 1 - (i * 0.70)),
               ).play;
 
               ((60/tempo/3) + jitter).wait;
@@ -38,20 +54,21 @@
         }
         { true } {
           Task {
-            var jitter = 0.05.rand;
+            // var jitter = 0.05.rand;
+            var jitter = 0;
 
             4.do({ | i |
               (
                 \type: \vst_midi,
                 \vst: ~drums,
                 \midinote: midinote,
-                \amp: vel.linlin(0, 127, 0, 1 - (i * 0.25)),
+                \amp: vel.linlin(0, 127, 0, 1 - (i * 0.10)),
               ).play;
 
-              ((60/tempo/3) + jitter).wait;
+              ((60/tempo/8) + jitter).wait;
             });
           }.start;
         }
-    }, "/drums")
+    }, "/drums/jitter");
   }.start;
 }.();

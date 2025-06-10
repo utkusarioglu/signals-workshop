@@ -23,7 +23,7 @@
     (
       \instrument: \cile,
       \inBus: ~bus
-    ).play
+    ).play;
     
   }.start;
 }.();

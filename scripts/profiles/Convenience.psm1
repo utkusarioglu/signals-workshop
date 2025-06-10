@@ -146,6 +146,8 @@ function Start-Components {
 }
 
 function Start-ScdUtils {
+  Throw "This function is deprecated. Use: Start-ScSynth, Start-ScdConsole, Start-OscServer"
+
   Stop-ScdUtils
 
   if(-Not $(Start-Components)) {

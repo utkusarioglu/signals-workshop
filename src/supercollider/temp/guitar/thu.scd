@@ -15,15 +15,11 @@
     s.sync;
     
     ~thu = VSTPluginController(Synth(\phase), id: \thu)
-      .open("TH-U-64", editor: true, verbose: true, action: _.editor);
-    
-    // OSCdef(\phase, {
-    //   arg msg;
-    //   var path, index, freq;
-    //   #path, index, freq = msg;
-
-    //   (index.asString + freq.asString).postln;
-    //   ~thu.set(index, freq);
-    // }, "/phase");
+      .open(
+        "TH-U-64", 
+        editor: true, 
+        verbose: true, 
+        action: _.editor
+      );
   }.start;
 }.();
