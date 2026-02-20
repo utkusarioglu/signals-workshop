@@ -71,8 +71,8 @@ Runtime {
   }
 
   *ready {
-    Task {
-      2.wait;
+    // Task {
+    //   2.wait;
       [
         "Client connected to '", 
         Runtime.getHost,
@@ -82,6 +82,6 @@ Runtime {
       ].reduce('++').postln;
 
       "Sclang ready.".postln;
-    }.start;
+    // }.start;
   }
 }

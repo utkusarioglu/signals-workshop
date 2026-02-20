@@ -22,7 +22,8 @@
         "ms-python.black-formatter",
         "ms-vscode.powershell",
         "tamasfe.even-better-toml",
-        "salkin-mada.language-supercollider"
+        "salkin-mada.language-supercollider",
+        "samuelcolvin.jinjahtml"
       ]
     }
   },

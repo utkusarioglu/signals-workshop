@@ -1,14 +1,17 @@
 {
-  ~drums.isNil.not.if({ ~drums.close });
-  // SynthDef(\drums).free;
+  ~group.notNil.if({~group.free});
+  ~drums.notNil.if({ ~drums.close });
 
-  SynthDef(\drums, {
+  ~group = Group.new;
+
+  ~drumsSynth = SynthDef(\drums, {
     Out.ar(0, VSTPlugin.ar(nil, 2, id: \drums));
   }).add;
 
   Task {
     s.sync;
-    ~drums = VSTPluginController(Synth(\drums), id: \drums)
+    ~drumSynth = Synth(\drums, target: ~group);
+    ~drums = VSTPluginController(~drumSynth, id: \drums)
       .open(
         "Superior Drummer 3",
         editor: true,

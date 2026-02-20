@@ -15,24 +15,26 @@ function Set-MergedSclangConfigFile {
   return $ArtifactPath.split("::")[1]
 }
 
-function Watch-Scsynth {
-  $ScsynthRunning = Get-Process "scsynth" -ErrorAction "SilentlyContinue"
-  if (-Not($ScsynthRunning)) {
-    Throw "Scsyth is not running"
-  }
-  $RegisterArgs = @{
-    InputObject = $ScsynthRunning
-    EventName = "Exited"
-    Action = {
-      Write-Host "Scsynth Exited"
-      [Environment]::Exit(0)
-    }
-    SourceIdentifier = "ScsynthExited"
-  }
-  $ObjectEvent = Register-ObjectEvent @RegisterArgs
-}
+# function Watch-Scsynth {
+#   $ScsynthRunning = Get-Process "scsynth" -ErrorAction "SilentlyContinue"
+#   if (-Not($ScsynthRunning)) {
+#     Throw "Scsynth is not running"
+#   }
+#   $RegisterArgs = @{
+#     InputObject = $ScsynthRunning
+#     EventName = "Exited"
+#     Action = {
+#       Write-Host "Scsynth Exited"
+#       [Environment]::Exit(0)
+#     }
+#     SourceIdentifier = "ScsynthExited"
+#   }
+#   $ObjectEvent = Register-ObjectEvent @RegisterArgs
+# }
 
-function Start-ScSynth {
+function Start-Scsynth {
+  Stop-Process -Name "scsynth" -ErrorAction SilentlyContinue
+
   $Pwd = $(pwd).Path.Split("::")[1]
   # $ScConfigPath = "${Pwd}\sc.config.json"
   $ScConfigPath = "${pwd}\sc.config.json"
@@ -69,9 +71,27 @@ function Start-ScSynth {
   scsynth.exe @ScsynthParams 
 }
 
-function Start-ScdConsole {
+# function Start-ScdConsole {
+#   Throw "This function has been replaced by Start-Sclang"
+#   $ArtifactPath = Set-MergedSclangConfigFile
+#   sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} -r
+# }
+
+function Start-Sclang {
+  Param (
+    [string]$Preset
+  )
   $ArtifactPath = Set-MergedSclangConfigFile
-  sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} -r
+  if ($Preset -ne "") {
+    Write-Host "Starting sclang with preset: '${Preset}'…"
+    Write-Host "Note: Console inputs will be disabled."
+
+    $TempFile = [System.IO.Path]::GetTempFileName()
+    sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} -r $TempFile -- --preset $Preset
+    Remove-Item $TempFile
+  } else {
+    sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} -r
+  }
 }
 
 function Get-SclangCommand {
@@ -89,41 +109,42 @@ function Get-SclangCommand {
   Return "sclang.exe -D -d ${ScdWslPath} -l ${SclangConfigPath} ${FileAbsPath} -r"
 }
 
-function Watch-Scd {
-  Param (
-    [Parameter(Mandatory = $True)]
-    [string]$FileRelPath,
-    [string]$WorkingDirectory
-  )
+# function Watch-Scd {
+#   Param (
+#     [Parameter(Mandatory = $True)]
+#     [string]$FileRelPath,
+#     [string]$WorkingDirectory
+#   )
 
-  $File = Get-ChildItem $FileAbspath
-  $Filename = $File.Name
-  $FileDirectoryName = $File.DirectoryName
+#   $File = Get-ChildItem $FileAbspath
+#   $Filename = $File.Name
+#   $FileDirectoryName = $File.DirectoryName
 
-  if($WorkingDirectory -eq "") {
-    $WorkingDirectory = $FileDirectoryName
-  } else {
-    $WorkingDirectory = Resolve-Path $WorkingDirectory
-  }
+#   if($WorkingDirectory -eq "") {
+#     $WorkingDirectory = $FileDirectoryName
+#   } else {
+#     $WorkingDirectory = Resolve-Path $WorkingDirectory
+#   }
 
-  # $SclangConfigPath = Set-MergedSclangConfigFile
-  $CallbackString = Get-SclangCommand -FileRelPath $FileRelPath
+#   # $SclangConfigPath = Set-MergedSclangConfigFile
+#   $CallbackString = Get-SclangCommand -FileRelPath $FileRelPath
 
-  $FileChangeArgs = @{
-    FileAbsPath = $FileAbspath
-    WorkingDirectory = $WorkingDirectory
-    Filter = "*.scd"
-    # CallbackString = "sclang.exe -l ${SclangConfigPath} ${FileAbsPath}"
-    CallbackString = $CallbackString
-  }
+#   $FileChangeArgs = @{
+#     FileAbsPath = $FileAbspath
+#     WorkingDirectory = $WorkingDirectory
+#     Filter = "*.scd"
+#     # CallbackString = "sclang.exe -l ${SclangConfigPath} ${FileAbsPath}"
+#     CallbackString = $CallbackString
+#   }
 
-  Watch-Scsynth
-  Watch-File @FileChangeArgs
-}
+#   Watch-Scsynth
+#   Watch-File @FileChangeArgs
+# }
 
-Export-ModuleMember -Function Watch-Scd
-Export-ModuleMember -Function Start-ScSynth
+# Export-ModuleMember -Function Watch-Scd
+Export-ModuleMember -Function Start-Scsynth
 Export-ModuleMember -Function Start-ScdConsole
+Export-ModuleMember -Function Start-Sclang
 
-Export-ModuleMember -Function Start-OscServer
+# Export-ModuleMember -Function Start-OscServer
 Export-ModuleMember -Function Get-SclangCommand

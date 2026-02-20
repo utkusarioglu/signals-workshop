@@ -1,6 +1,7 @@
 services:
   signals-workshop:
-    image: utkusarioglu/conda-music-devcontainer:3.13-ubuntu-test-24
+    # image: utkusarioglu/conda-music-devcontainer:3.13-ubuntu-test-27
+    image: utkusarioglu/conda-music-devcontainer:3.13-ubuntu-test-29
     extra_hosts:
       # supercollider: host-gateway
       supercollider: 192.168.1.151

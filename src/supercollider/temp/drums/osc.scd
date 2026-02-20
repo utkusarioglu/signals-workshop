@@ -38,8 +38,8 @@
         }
         { [38].includes(midinote) } {
           Task {
-            // var jitter = 0.06.rand;
-            var jitter = 0;
+            var jitter = 0.08.rand;
+            // var jitter = 0;
             1.do({ | i |
               (
                 \type: \vst_midi,
@@ -54,8 +54,8 @@
         }
         { true } {
           Task {
-            // var jitter = 0.05.rand;
-            var jitter = 0;
+            var jitter = 0.05.rand;
+            // var jitter = 0;
 
             4.do({ | i |
               (

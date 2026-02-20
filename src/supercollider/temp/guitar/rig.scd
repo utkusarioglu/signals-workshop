@@ -1,10 +1,9 @@
 {
-  ~guitar.isNil.not.if({
-    ~guitar.close;
-    ~guitar.free;
+  ~rig.isNil.not.if({
+    ~rig.close;
+    ~rig.free;
   });
   Synth(\guitar).free;
-
 
   SynthDef(\guitar, {
      var sig;
@@ -15,8 +14,8 @@
   
   Task {
     s.sync;
-    ~sy = Synth(\guitar, [\inBus, 10, \outBus, 0]);
-    ~guitar = VSTPluginController(~sy, id: \guitar)
+    ~synth = Synth(\guitar, [\inBus, 10, \outBus, 0]);
+    ~rig = VSTPluginController(~synth, id: \guitar)
       .open(
         "Guitar Rig 6",
         editor: true,

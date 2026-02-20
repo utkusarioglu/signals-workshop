@@ -16,4 +16,8 @@ Load {
 
     ^(fileAbsPath.load);
   }
+
+  *preset { | name |
+    Load.scd("temp" +/+ "preset" +/+ name);
+  }
 }

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+      body {
+        background-color: #050505;
+        font-family: monospace;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100svh;
+        width: 100svw;
+        overflow: hidden;
+        text-align: center;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      data {
+        color: #aaa;
+        font-weight: 800;
+        font-size: 30px;
+      }
+
+      h3 {
+        color: #777;
+        font-size: 10px;
+      }
+
+      button {
+        pointer-events: all;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <h3>alpha</h3>
+      <data id="alpha"></data>
+      <h3>beta</h3>
+      <data id="beta"></data>
+      <h3>gamma</h3>
+      <data id="gamma"></data>
+      <h3>x</h3>
+      <data id="x"></data>
+      <h3>y</h3>
+      <data id="y"></data>
+    </div>
+    <button style="position: fixed; bottom: 0;" id="calibrate">Calibrate (<span></span>)</button>
+  </body>
+  <script>
+    const elems = {
+      orientation: [
+        document.querySelector("#alpha"),
+        document.querySelector("#beta"),
+        document.querySelector("#gamma"),
+      ],
+      position: [
+        document.querySelector("#x"),
+        document.querySelector("#y"),
+      ],
+    };
+    const calibrate = document.querySelector("#calibrate");
+    const socket = new WebSocket("wss://192.168.1.151:5000/ws");
+
+    const ORIENTATION_DEFAULT = [180, 0, 0];
+    let orientationOrigin = [...ORIENTATION_DEFAULT];
+    let orientationPrev = [...orientationOrigin];
+    let touchPrev = [0, 0];
+
+    const setOriginDisplay = () => {
+      calibrate.querySelector("span").innerText = orientationOrigin.join(",");
+    };
+    const onDeviceOrientation = ({ alpha, beta, gamma }) => {
+      const alt = [alpha, beta, gamma].map((v) => Math.round(v));
+      if (alt.join(",") != orientationPrev.join(","))
+      {
+        socket.send([...alt,]);
+        orientationPrev = [...alt];
+        for (let i = 0; i < elems.orientation.length; i++)
+        {
+          elems.orientation[i].innerText = alt[i];
+        }
+      }
+    };
+    setOriginDisplay();
+
+    calibrate.addEventListener("click", () => {
+      for (let i = 0; i < ORIENTATION_DEFAULT.length; i++)
+      {
+        orientationOrigin[i] = ORIENTATION_DEFAULT[i] - orientationPrev[i];
+      };
+      setOriginDisplay();
+    });
+
+    socket.addEventListener("open", () => {
+      console.log("Connected to server");
+      socket.send(orientationOrigin.join(","));
+    });
+
+    window.addEventListener("deviceorientation", onDeviceOrientation);
+    window.addEventListener("touchmove", ({ touches }) => {
+      const sizes = [
+        window.innerWidth,
+        window.innerHeight
+      ];
+      [
+        touches[0].clientX,
+        touches[0].clientY
+      ]
+        .map((v) => v * 100)
+        .map((v, i) => v / sizes[i])
+        .map(Math.round)
+        .forEach((v, i) => {
+          elems.position[i].innerText = v;
+        });
+    });
+
+    window.addEventListener("dblclick", () => {
+      console.log("double click");
+      document.documentElement.requestFullscreen();
+    })
+
+  </script>
+
+</html>
