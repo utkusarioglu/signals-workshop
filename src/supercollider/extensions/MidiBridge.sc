@@ -10,7 +10,7 @@ MidiBridge {
     controls = Dictionary();
     controllers = Dictionary();
 
-    MIDIClient.init;
+   // MIDIClient.init;
     // MIDIClient.destinations;
   }
   

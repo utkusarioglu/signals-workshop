@@ -1,16 +1,36 @@
 services:
+  init-container:
+    image: alpine
+    user: root
+    volumes:
+      - type: volume
+        source: signals-workshop-supercollider
+        target: /data
+    command: chown -R 1000:1000 /data
+
   signals-workshop:
-    # image: utkusarioglu/conda-music-devcontainer:3.13-ubuntu-test-27
     image: utkusarioglu/conda-music-devcontainer:3.13-ubuntu-test-29
+    depends_on:
+      init-container:
+        condition: service_completed_successfully
     extra_hosts:
       # supercollider: host-gateway
       supercollider: 192.168.1.151
+    # cap_add:
+    #   - SYS_NICE
+    # ulimits:
+    #   rtprio:
+    #     soft: 99
+    #     hard: 99
+    #   memlock:
+    #     soft: -1
+    #     hard: -1
     ports:
       - 5000:5000
       - 5005:5005/udp
     environment:
       PYTHONPATH: /utkusarioglu-com/workshops/signals-workshop/src
-      PULSE_SERVER: unix:/mnt/wslg/PulseServer
+      # PULSE_SERVER: unix:/mnt/wslg/PulseServer
 
       ARTIFACTS_ABSPATH: /utkusarioglu-com/workshops/signals-workshop/artifacts
       ASSETS_ABSPATH: /assets
@@ -19,11 +39,26 @@ services:
       - type: bind
         source: ..
         target: /utkusarioglu-com/workshops/signals-workshop
+      # - type: bind
+      #   source: /mnt/c/Users/utkus/AppData/Local/SuperCollider
+      #   target: /scd-user
+      # - type: bind
+      #   source: /mnt/c/ProgramData/SuperCollider
+      #   target: /scd-system
+      - type: volume
+        source: signals-workshop-supercollider
+        target: /home/dev/.local/share/SuperCollider
+      # - type: bind
+      #   source: ../src/supercollider/quarks
+      #   target: /home/dev/.local/share/SuperCollider/downloaded-quarks
 
-      - type: bind
-        source: /mnt/wslg/PulseServer
-        target: /mnt/wslg/PulseServer
-      
+      # - type: bind
+      #   source: /mnt/wslg/PulseServer
+      #   target: /mnt/wslg/PulseServer
+
       - type: bind
         source: /mnt/d/Audio
         target: /assets
+
+volumes:
+  signals-workshop-supercollider:

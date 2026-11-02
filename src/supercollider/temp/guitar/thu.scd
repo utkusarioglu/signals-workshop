@@ -22,7 +22,10 @@
         "TH-U-64", 
         editor: true, 
         verbose: true, 
-        action: _.editor
+        action: { | c |
+          c.editor;
+          c.moveEditor(1920, 100);
+        }
       );
   }.start;
 }.();

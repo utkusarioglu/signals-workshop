@@ -1,0 +1,9 @@
+includePaths:
+    -   /utkusarioglu-com/workshops/signals-workshop/src/supercollider
+    -   /home/dev/.local/share/SuperCollider/downloaded-quarks/JSONlib
+    -   /home/dev/.local/share/SuperCollider/downloaded-quarks/ScampUtils
+    -   /home/dev/.local/share/SuperCollider/downloaded-quarks/vstplugin
+excludePaths:
+    []
+postInlineWarnings: true
+excludeDefaultPaths: false

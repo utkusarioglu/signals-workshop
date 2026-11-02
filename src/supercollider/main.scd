@@ -1,3 +1,8 @@
+// Quarks.folder(".quarks");
+Quarks.install("JSONlib");
+Quarks.install("ScampUtils");
+Quarks.install("https://github.com/Spacechild1/vstplugin.git");
+
 Specs.setFile(Path.fromRepoRoot("artifacts/scd_runtime.json"));
 Runtime.setConfig(Json.load(Path.fromRepoRoot("sc.config.json")));
 
