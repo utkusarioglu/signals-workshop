@@ -1,3 +1,11 @@
+from dotenv import load_dotenv
+
+load_dotenv()
+
+import os
+
+print("p:", os.environ.get("PYTHONPATH"))
+
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 from json import dumps
