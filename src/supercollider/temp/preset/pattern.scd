@@ -138,7 +138,7 @@
   ]),
     Pbindf(*[
     ~common,
-    \midinote: 46,
+    \midinote: 49,
     \dur: 3
   ]),
 ]);
@@ -163,11 +163,11 @@
 ]);
 
 ~play = Pgroup(Pseq([
- // Pfindur(4, ~pattern[\one]),
- // Pfindur(2, ~pattern[\two]),
+//  Pfindur(4, ~pattern[\one]),
+ Pfindur(2, ~pattern[\two]),
  // Pfindur(4, ~pattern[\metal]),
   // Pfindur(9/4, ~pattern[\aksak]),
-   Pfindur(12/4, ~pattern[\solea]),
-  Pfindur(12/4, ~pattern[\bulerias1]),
+  //  Pfindur(12/4, ~pattern[\solea]),
+  // Pfindur(12/4, ~pattern[\bulerias1]),
   // Pfindur(12/4, ~pattern[\bulerias2]),
 ], 2)).play(TempoClock.new(0.9));

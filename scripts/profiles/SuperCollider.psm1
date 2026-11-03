@@ -44,6 +44,7 @@ function Start-Scsynth {
 
   $ScsynthParams = @(
     "-t", $Port
+    # "-u", $Port
     "-B", "0.0.0.0",
     "-H", "ASIO : Focusrite USB ASIO",
     

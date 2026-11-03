@@ -31,8 +31,7 @@ Client {
         Load.temp(tempScript);
       });
     };
-      
-    if(Server.default.addr.isConnected, {
+    Server.default.addr.isConnected.if({
       "Already connected.".postln;
       loadTemp.()
     }, {

@@ -7,7 +7,7 @@ Load {
   *relpath { | fileRelpath |
     var fileAbsPath = Path.resolve(fileRelpath, checkIfExists: false);
     fileAbsPath = Path.withExtension(fileAbsPath);
-    this.abspath.(fileAbsPath)
+    this.abspath(fileAbsPath)
   }
 
   *temp { | tempName |

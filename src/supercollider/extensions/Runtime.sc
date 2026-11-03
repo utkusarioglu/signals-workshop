@@ -71,17 +71,14 @@ Runtime {
   }
 
   *ready {
-    // Task {
-    //   2.wait;
-      [
-        "Client connected to '", 
-        Runtime.getHost,
-        ":", 
-        Runtime.getPort,
-        "'."
-      ].reduce('++').postln;
+    [
+      "Client connected to '", 
+      Runtime.getHost,
+      ":", 
+      Runtime.getPort,
+      "'."
+    ].reduce('++').postln;
 
-      "Sclang ready.".postln;
-    // }.start;
+    "Sclang ready.".postln;
   }
 }
