@@ -4,12 +4,12 @@ Client {
   }
 
   *setup { |
-    host = "localhost",
+    host = "127.0.0.1",
     port = 57110
     |
     var options, server;
 
-    ["Establishing connection with ", host, ":", port, "…"].reduce('++').postln;
+    ["Establishing connection to ", host, ":", port, "…"].reduce('++').postln;
 
     options = ServerOptions.new;
     options.protocol_(\tcp);

@@ -1,10 +1,13 @@
 Load {
-  *scd { | fileRelpath |
+  *abspath { |fileAbsPath| 
+    ("Loaded:" + fileAbsPath).postln;
+    ^(fileAbsPath.load);
+  }
+
+  *relpath { | fileRelpath |
     var fileAbsPath = Path.resolve(fileRelpath, checkIfExists: false);
     fileAbsPath = Path.withExtension(fileAbsPath);
-    ("Loaded:" + fileAbsPath).postln;
-
-    ^(fileAbsPath.load);
+    this.abspath.(fileAbsPath)
   }
 
   *temp { | tempName |
@@ -18,6 +21,6 @@ Load {
   }
 
   *preset { | name |
-    Load.scd("temp" +/+ "preset" +/+ name);
+    Load.relpath("temp" +/+ "preset" +/+ name);
   }
 }

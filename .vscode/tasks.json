@@ -2,6 +2,50 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Interpret SuperCollider preset",
+      "detail": "Run preset file with sclang",
+      "command": "scripts/sclang.sh",
+      "args": [
+        "--preset",
+        "${input:presetName}",
+      ],
+      "icon": {
+        "id": "play",
+        "color": "terminal.ansiGreen"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Interpret SuperCollider file",
+      "detail": "Run the current file with sclang",
+      "command": "scripts/sclang.sh",
+      "args": [
+        "--file",
+        "${file}",
+      ],
+      "icon": {
+        "id": "play",
+        "color": "terminal.ansiGreen"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Test Monitor",
       "detail": "Run tests",
       "type": "shell",
@@ -38,6 +82,14 @@
         "clear": true,
         "close": true
       }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "presetName",
+      "description": "SuperCollide preset name",
+      "type": "promptString",
+      "default": "main"
     }
   ]
 }

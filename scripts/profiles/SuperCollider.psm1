@@ -1,19 +1,19 @@
 $ScdWslPath = "\\wsl.localhost\u-Boulanger\home\utkusarioglu\dev\workshops\signals-workshop\src\supercollider"
 
-function Set-MergedSclangConfigFile {
-  $Pwd = $(pwd).Path.Split("::")[1]
-  $ArtifactPath = "$(Pwd)\artifacts\sclang_config_merged.yaml"
-  $DefaultConfigPath = "C:\Users\Utkus\AppData\Local\Supercollider\sclang_conf.yaml"
-  $RepoConfigPath = "${Pwd}\sclang_conf.yaml"
+# function Set-MergedSclangConfigFile {
+#   $Pwd = $(pwd).Path.Split("::")[1]
+#   $ArtifactPath = "$(Pwd)\artifacts\sclang_config_merged.yaml"
+#   $DefaultConfigPath = "C:\Users\Utkus\AppData\Local\Supercollider\sclang_conf.yaml"
+#   $RepoConfigPath = "${Pwd}\sclang_conf.yaml"
 
-  yq eval-all `
-    '. as $item ireduce ({}; . *+ $item)' `
-    $DefaultConfigPath `
-    $RepoConfigPath `
-    > $ArtifactPath
+#   yq eval-all `
+#     '. as $item ireduce ({}; . *+ $item)' `
+#     $DefaultConfigPath `
+#     $RepoConfigPath `
+#     > $ArtifactPath
 
-  return $ArtifactPath.split("::")[1]
-}
+#   return $ArtifactPath.split("::")[1]
+# }
 
 # function Watch-Scsynth {
 #   $ScsynthRunning = Get-Process "scsynth" -ErrorAction "SilentlyContinue"
@@ -68,37 +68,37 @@ function Start-Scsynth {
 #   sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} -r
 # }
 
-function Start-Sclang {
-  Param (
-    [string]$Preset
-  )
-  $ArtifactPath = Set-MergedSclangConfigFile
-  if ($Preset -ne "") {
-    Write-Host "Starting sclang with preset: '${Preset}'…"
-    Write-Host "Note: Console input will be disabled."
+# function Start-Sclang {
+#   Param (
+#     [string]$Preset
+#   )
+#   $ArtifactPath = Set-MergedSclangConfigFile
+#   if ($Preset -ne "") {
+#     Write-Host "Starting sclang with preset: '${Preset}'…"
+#     Write-Host "Note: Console input will be disabled."
 
-    $TempFile = [System.IO.Path]::GetTempFileName()
-    sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} -r $TempFile -- --preset $Preset
-    Remove-Item $TempFile
-  } else {
-    sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} -r
-  }
-}
+#     $TempFile = [System.IO.Path]::GetTempFileName()
+#     sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} -r $TempFile -- --preset $Preset
+#     Remove-Item $TempFile
+#   } else {
+#     sclang.exe -l ${ArtifactPath} -d ${ScdWslPath} -r
+#   }
+# }
 
-function Get-SclangCommand {
-  Param (
-    [Parameter(Mandatory = $True)]
-    [string]$FileRelPath
-  )
+# function Get-SclangCommand {
+#   Param (
+#     [Parameter(Mandatory = $True)]
+#     [string]$FileRelPath
+#   )
 
-  $FileAbspath = @( 
-    $(Get-Location).Path.Split("::")[1],
-    $FileRelPath 
-  ) -Join "\"
+#   $FileAbspath = @( 
+#     $(Get-Location).Path.Split("::")[1],
+#     $FileRelPath 
+#   ) -Join "\"
 
-  $SclangConfigPath = Set-MergedSclangConfigFile
-  Return "sclang.exe -D -d ${ScdWslPath} -l ${SclangConfigPath} ${FileAbsPath} -r"
-}
+#   $SclangConfigPath = Set-MergedSclangConfigFile
+#   Return "sclang.exe -D -d ${ScdWslPath} -l ${SclangConfigPath} ${FileAbsPath} -r"
+# }
 
 # function Watch-Scd {
 #   Param (
@@ -134,8 +134,8 @@ function Get-SclangCommand {
 
 # Export-ModuleMember -Function Watch-Scd
 Export-ModuleMember -Function Start-Scsynth
-Export-ModuleMember -Function Start-ScdConsole
-Export-ModuleMember -Function Start-Sclang
+# Export-ModuleMember -Function Start-ScdConsole
+# Export-ModuleMember -Function Start-Sclang
 
 # Export-ModuleMember -Function Start-OscServer
-Export-ModuleMember -Function Get-SclangCommand
+# Export-ModuleMember -Function Get-SclangCommand
